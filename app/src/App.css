@@ -31,3 +31,21 @@
     transform: rotate(360deg);
   }
 }
+
+.list-activities {
+  font-size: 1em;
+  text-align: initial;
+  padding: 20px;
+}
+
+.description {
+  position: relative;
+  display: inline-block;
+  width: 90%;
+}
+
+.points {
+  position: relative;
+  display: inline-block;
+  width: 10%;
+}
