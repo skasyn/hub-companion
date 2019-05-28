@@ -77,6 +77,8 @@ class ListActivities extends React.Component {
       acculturation: 0,
       fruition: 0,
       sharing: 0,
+      plan: {},
+      received: false,
     }
   }
 
@@ -98,22 +100,25 @@ class ListActivities extends React.Component {
       state.fruition = data.fruition;
       state.sharing = data.sharing;
       state.plan = data.plan;
+      state.received = true;
       this.setState({state: state})
     })
   }
 
   render() {
-    if (this.state.infos.length === 0) {
+    if (!this.state.received) {
       this.getInfos(this.props.id);
+      console.log(this.state)
       return (
-        <div/>
+        <div>
+          <h1>infos</h1>
+        </div>
       )
     } else {
       let acc_perc = this.state.acculturation * 100 / 4;
       let exp_perc = this.state.experimentation * 100 / 3;
       let fru_perc = this.state.fruition * 100 / 2;
       let sha_perc = this.state.sharing * 100 / 2;
-      if (this.state.infos.length !== 0)
       return (
         <div>
           <RadialChart percentage={acc_perc} name="Acculturation" number={this.state.acculturation + "/4"}/>
