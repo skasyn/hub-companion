@@ -10,7 +10,8 @@
     "mongodb": "^3.2.4",
     "mongoose": "^5.5.8",
     "react-apexcharts": "^1.3.3",
-    "react-cookie": "^1.0.5"
+    "react-cookie": "^1.0.5",
+    "redux": "^4.0.1"
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
