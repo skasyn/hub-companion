@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 import Chart from 'react-apexcharts';
+import { Progress, Row, Col } from "antd";
 import '../../App.css';
 
 class RadialChart extends React.Component {
@@ -64,10 +65,34 @@ class CompCharts extends React.Component {
     if (acc_perc) {
       return (
         <div>
-          <RadialChart percentage={acc_perc} name="Acculturation" number={this.props.points.acculturation + "/" + this.props.plan.acculturation}/>
-          <RadialChart percentage={exp_perc} name="Experimentation" number={this.props.points.experimentation + "/" + this.props.plan.experimentation}/>
-          <RadialChart percentage={fru_perc} name="Fruition" number={this.props.points.fruition + "/" + this.props.plan.fruition}/>
-          <RadialChart percentage={sha_perc} name="Sharing" number={this.props.points.sharing + "/" + this.props.plan.sharing}/>
+          <Row>
+            <Col span={6}>
+              Acculturation : {this.props.points.acculturation + "/" + this.props.plan.acculturation}
+            </Col>
+            <Col span={6}>
+              Experimentation : {this.props.points.experimentation + "/" + this.props.plan.experimentation}
+            </Col>
+            <Col span={6}>
+              Fruition : {this.props.points.fruition + "/" + this.props.plan.fruition}
+            </Col>
+            <Col span={6}>
+              Sharing : {this.props.points.sharing + "/" + this.props.plan.sharing}
+            </Col>
+          </Row>
+          <Row>
+            <Col span={6}>
+              <Progress type="circle" percent={acc_perc} status={(!acc_perc ? "normal" : "")}>Acculturation</Progress>
+            </Col>
+            <Col span={6}>
+              <Progress type="circle" percent={exp_perc} status={(!exp_perc ? "normal" : "")}>Experimentation</Progress>
+            </Col>
+            <Col span={6}>
+              <Progress type="circle" percent={fru_perc} status={(!fru_perc ? "normal" : "")}>Fruition</Progress>
+            </Col>
+            <Col span={6}>
+              <Progress type="circle" percent={sha_perc} status={(!sha_perc ? "normal" : "")}>Sharing</Progress>
+            </Col>
+          </Row>
         </div>
       )
     } else {
