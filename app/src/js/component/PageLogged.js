@@ -1,10 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
-import Disconnect from "./Disconnect";
-import Refresh from "./Refresh";
-import ListActivities from "./ListActivities";
-import IntraImg from "./IntraImg";
 import '../../App.css';
+import SiderDemo from './NewApp'
 
 const mapStateToProps = state => {
   return { name: state.name}
@@ -12,14 +9,7 @@ const mapStateToProps = state => {
 
 function CompPageLogged(state) {
   return (
-    <div>
-      <h1>LOGGED !</h1>
-      <IntraImg/>
-      <h1>Welcome, {state.name}</h1>
-      <ListActivities/>
-      <Disconnect/>
-      <Refresh/>
-    </div>
+    <SiderDemo state={state}/>
   )
 }
 
