@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { fetchInfos } from "../actions/index";
 import Charts from "./Charts";
 import '../../App.css';
+import { WallitList} from "./WallitAssets";
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -24,18 +25,19 @@ class CompListActivities extends React.Component {
     let list = "";
 
     if (this.props.activities.length > 0) {
-      list = this.props.activities.map(function(elem, index) {
-        return (
-          <div key={index} className="list-activities">
-            <div className="description">
-              {elem.description + ":" + elem.present}
-            </div>
-            <div className="points">
-              {elem.type + " " + elem.points}
-            </div>
-          </div>
-        )
-      })
+      // list = this.props.activities.map(function(elem, index) {
+      //   return (
+      //     <div key={index} className="list-activities">
+      //       <div className="description">
+      //         {elem.description + ":" + elem.present}
+      //       </div>
+      //       <div className="points">
+      //         {elem.type + " " + elem.points}
+      //       </div>
+      //     </div>
+      //   )
+      // })
+      list = <WallitList elem={this.props.activities}/>
     }
     return (
       <div>

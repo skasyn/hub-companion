@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
-import {Avatar, Button, List} from 'antd'
-import 'antd/dist/antd.css'
+import {Avatar, Button, List} from 'antd/lib/index'
 
 export class LoadingButton extends Component {
 
@@ -36,16 +35,11 @@ LoadingButton.defaultProps = {
 }
 
 
-// {elem.description + " : " + elem.present}
-// </div>
-// <div className="points">
-// {elem.type + " " + elem.points}
-
 export class WallitList extends Component {
 
     render() {
         return (
-            <section>
+            <div>
                 <List
                     itemLayout="horizontal"
                     dataSource={this.props.elem}
@@ -59,7 +53,7 @@ export class WallitList extends Component {
                         </List.Item>
                     )}
                 />
-            </section>
+            </div>
         )
     }
 }

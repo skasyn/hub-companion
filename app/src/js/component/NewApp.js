@@ -64,7 +64,7 @@ class SiderDemo extends React.Component {
                                 />
                             </Col>
                             <Col span={22}>
-                                <h1>Hub Companion</h1>
+                                <h1>Hub Companion - Welcome, {this.props.state.name}</h1>
                             </Col>
                         </div>
                     </Header>
@@ -76,9 +76,7 @@ class SiderDemo extends React.Component {
                         }}
                     >
                         <div>
-                            <h1>LOGGED !</h1>
                             <IntraImg/>
-                            <h1>Welcome, {this.props.state.name}</h1>
                             <ListActivities/>
                             <Disconnect/>
                             <Refresh/>
