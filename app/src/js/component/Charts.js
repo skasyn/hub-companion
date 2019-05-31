@@ -38,16 +38,16 @@ class CompCharts extends React.Component {
           </Row>
           <Row>
             <Col span={6}>
-              <Progress type="circle" percent={acc_perc}>Acculturation</Progress>
+              <Progress type="circle" strokeWidth={10} percent={acc_perc}>Acculturation</Progress>
             </Col>
             <Col span={6}>
-              <Progress type="circle" percent={exp_perc}>Experimentation</Progress>
+              <Progress type="circle" strokeWidth={10} percent={exp_perc}>Experimentation</Progress>
             </Col>
             <Col span={6}>
-              <Progress type="circle" percent={fru_perc}>Fruition</Progress>
+              <Progress type="circle" strokeWidth={10} percent={fru_perc}>Fruition</Progress>
             </Col>
             <Col span={6}>
-              <Progress type="circle" percent={sha_perc}>Sharing</Progress>
+              <Progress type="circle" strokeWidth={10} percent={sha_perc}>Sharing</Progress>
             </Col>
           </Row>
         </div>
