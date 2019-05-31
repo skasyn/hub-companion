@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Layout, Menu, Icon, Col, Avatar, Row } from 'antd/lib/index';
 import logo from '../../wallit.png';
 import './NewApp.css'
@@ -6,9 +6,114 @@ import Disconnect from "./Disconnect";
 import Refresh from "./Refresh";
 import ListActivities from "./ListActivities";
 import IntraImg from "./IntraImg";
+import Charts from "./Charts";
+import { fetchInfos } from "../actions/index";
 import '../../App.css';
+import { connect } from "react-redux";
+import { changeContent } from '../actions/index';
 
 const { Header, Sider, Content } = Layout;
+
+function ContentMapDispatchToProps(dispatch) {
+    return {
+      fetchAuto: code => dispatch(fetchInfos(code))
+    }
+}
+
+const ContentMapStateToProps = state => {
+    return {
+        content: state.content,
+        id: state.id,
+        activities: state.activities,
+        name: state.name
+    }
+}
+
+class CompMiddleContent extends React.Component {
+    render() {
+        if (this.props.activities.length === 0)
+            this.props.fetchAuto(this.props.id);
+    
+        if (this.props.content === 1) {
+            return (
+                <div>
+                    <h1>Hub Companion</h1>
+                    <h1>Welcome, {this.props.name}</h1>
+                    <IntraImg/>
+                    <Charts/>
+                    <Disconnect/>
+                    <Refresh/>
+                </div>
+            )
+        } else if (this.props.content === 2) {
+            return (
+                <div>
+                    <ListActivities/>
+                </div>
+            )
+        } else {
+            return (<h1> </h1>)
+        }
+    }    
+}
+
+const MiddleContent = connect(ContentMapStateToProps, ContentMapDispatchToProps)(CompMiddleContent);
+
+/*************************/
+
+class SiderComponent extends React.Component {
+    render() {
+        return (
+            <Sider trigger={null} collapsible collapsed={this.props.collapsed} id="sider-component">
+                <div className="logo">
+                    <Avatar src={logo} />
+                </div>
+                <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} >
+                    <Menu.Item key="1" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(1)}>
+                        <Icon type="dashboard" style={{fontSize: '1em'}} />
+                        <span>Dashboard</span>
+                    </Menu.Item>
+                    <Menu.Item key="2" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(2)}>
+                        <Icon type="database" style={{fontSize: '1em'}} />
+                        <span>Activities</span>
+                    </Menu.Item>
+                    <Menu.Item key="3" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(3)}>
+                        <Icon type="form" style={{fontSize: '1em'}} />
+                        <span>Submissions</span>
+                    </Menu.Item>
+                </Menu>
+            </Sider>
+        )
+    }
+}
+
+/*************************/
+
+class HeaderComponent extends React.Component {
+    render() {
+        return (
+            <Header style={{ background: '#fff', padding: 0, height: 'initial'}}>
+                <div>
+                    <Col span={2}>
+                        <Icon
+                            className="trigger"
+                            type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
+                            onClick={this.props.toggle}
+                        />
+                    </Col>
+                </div>
+            </Header>
+        )
+    }
+}
+
+/*************************/
+
+function SiderMapDispatchToProps(dispatch) {
+    return {
+      changeContentClick: content => dispatch(changeContent(content))
+    }
+}
 
 class SiderDemo extends React.Component {
     state = {
@@ -23,51 +128,10 @@ class SiderDemo extends React.Component {
 
     render() {
         return (
-            <Layout>
-                <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-                    <div className="logo">
-                            <Col span={6}/>
-                            <Col span={12}>
-                                <div>
-                                    <Row type="flex" justify="center">
-                                        <Col span={6}/>
-                                        <Col span={12}><Avatar src={logo}/></Col>
-                                        <Col span={6}/>
-                                    </Row>
-                                </div>
-                            </Col>
-                            <Col span={6}/>
-                    </div>
-                    <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                        <Menu.Item key="1">
-                            <Icon type="user" />
-                            <span>nav 1</span>
-                        </Menu.Item>
-                        <Menu.Item key="2">
-                            <Icon type="video-camera" />
-                            <span>nav 2</span>
-                        </Menu.Item>
-                        <Menu.Item key="3">
-                            <Icon type="upload" />
-                            <span>nav 3</span>
-                        </Menu.Item>
-                    </Menu>
-                </Sider>
-                <Layout>
-                    <Header style={{ background: '#fff', padding: 0 }}>
-                        <div>
-                            <Col span={2}>
-                                <Icon
-                                    className="trigger"
-                                    type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                                    onClick={this.toggle}
-                                />
-                            </Col>
-                            <Col span={22}>
-                                <h1>Hub Companion - Welcome, {this.props.state.name}</h1>
-                            </Col>
-                        </div>
-                    </Header>
+            <Layout style={{minWidth: '100%'}} id="layout">
+                <SiderComponent collapsed={this.state.collapsed} changeContentClick={this.props.changeContentClick}/>
+                <Layout id="content-layout">
+                    <HeaderComponent collapsed={this.state.collapsed} toggle={this.toggle}/>
                     <Content
                         style={{
                             padding: 0,
@@ -75,12 +139,7 @@ class SiderDemo extends React.Component {
                             height: '100%',
                         }}
                     >
-                        <div>
-                            <IntraImg/>
-                            <ListActivities/>
-                            <Disconnect/>
-                            <Refresh/>
-                        </div>
+                        <MiddleContent/>
                     </Content>
                 </Layout>
             </Layout>
@@ -88,4 +147,4 @@ class SiderDemo extends React.Component {
     }
 }
 
-export default SiderDemo
+export default connect(null, SiderMapDispatchToProps)(SiderDemo);

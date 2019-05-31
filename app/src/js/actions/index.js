@@ -4,6 +4,7 @@ export const LOGIN_FINISHED = 'LOGIN_FINISHED'
 export const FETCH_INFOS = 'FETCH_INFOS'
 export const DISCONNECT = 'DISCONNECT'
 export const REFRESH = 'REFRESH';
+export const CONTENT_CHANGE = 'CONTENT_CHANGE';
 
 export function login(payload) {
   return function(dispatch) {
@@ -96,7 +97,7 @@ export function fetchInfos(payload) {
 }
 
 export function disconnect() {
-  return { type: DISCONNECT }
+  return { type: DISCONNECT };
 }
 
 export function refresh() {
@@ -105,6 +106,10 @@ export function refresh() {
       accept: "application/json",
       method: "post"
     });
-    return { type: REFRESH }
+    return { type: REFRESH };
   }
+}
+
+export function changeContent(payload) {
+  return { type: CONTENT_CHANGE, payload};
 }
