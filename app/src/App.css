@@ -9,7 +9,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .App {
-  background-color: #282c34;
+  background-color: white;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -63,4 +63,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .ant-progress-circle-trail {
   stroke: rgb(200, 200, 200) !important;
+}
+
+.not-logged {
+  text-align: center;
 }
