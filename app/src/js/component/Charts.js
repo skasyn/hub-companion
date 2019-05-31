@@ -14,10 +14,10 @@ const mapStateToProps = state => {
 
 class CompCharts extends React.Component {
   render() {
-    let acc_perc = this.props.points.acculturation * 100 / this.props.plan.acculturation;
-    let exp_perc = this.props.points.experimentation * 100 / this.props.plan.experimentation;
-    let fru_perc = this.props.points.fruition * 100 / this.props.plan.fruition;
-    let sha_perc = this.props.points.sharing * 100 / this.props.plan.sharing;
+    let acc_perc = Math.round(this.props.points.acculturation * 100 / this.props.plan.acculturation);
+    let exp_perc = Math.round(this.props.points.experimentation * 100 / this.props.plan.experimentation);
+    let fru_perc = Math.round(this.props.points.fruition * 100 / this.props.plan.fruition);
+    let sha_perc = Math.round(this.props.points.sharing * 100 / this.props.plan.sharing);
 
     if (!isNaN(acc_perc)) {
       return (

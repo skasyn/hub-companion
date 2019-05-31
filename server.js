@@ -63,7 +63,9 @@ const ActivitySchema = mongoose.Schema({
   type_code: String,
   investment_type: String,
   investment_points: Number,
+  title: String,
   description: String,
+  date: String,
   registered: [{
     email: String,
     present: String
@@ -83,12 +85,12 @@ function isEmpty(obj) {
 }
 
 function getDescription(event, activity) {
-  if (activity.title !== null && event.description !== "")
-    return activity.title;
-  else if (event.description !== null && event.description !== "")
+  if (event.description !== null && event.description !== "")
     return event.description;
-  else
+  else if (activity.description !== null && activity.description !== "")
     return activity.description;
+  else
+    return activity.title;
 }
 
 function checkTypeAndPoints(activity, hubModule, description) {
@@ -120,8 +122,10 @@ function checkTypeAndPoints(activity, hubModule, description) {
 }
 
 function activityUpsert(event, activity, studentList, hubModule) {
+  title = activity.title || event.title;
   description = getDescription(event, activity);
-  PointsType = checkTypeAndPoints(activity, hubModule, description)
+  date = event.begin || event.end;
+  PointsType = checkTypeAndPoints(activity, hubModule, title)
 
   Activity.updateOne({
     code: event.code
@@ -130,12 +134,13 @@ function activityUpsert(event, activity, studentList, hubModule) {
     id: event.id_activite,
     type: activity.type_title,
     type_code: activity.type_code,
+    title: title,
+    date: date,
     description: description,
     registered: studentList,
     investment_type: PointsType[1],
     investment_points: PointsType[0],
-  }, {upsert: true}, function(err, res) {
-  });
+  }, {upsert: true}, function(err, res) {});
 }
 
 function retrieveEvents(year, hubModule, city, event, activity) {
@@ -189,7 +194,14 @@ function getUserInfos(res, req, resPost, user) {
 
   for (let event of res) {
     reg = event.registered.find(function(element) { return element.email === user.mail});
-    response.push({description: event.description, present: reg.present, type: event.investment_type, points: event.investment_points});
+    response.push({
+      title: event.title,
+      description: event.description,
+      present: reg.present,
+      type: event.investment_type,
+      points: event.investment_points,
+      date: event.date,
+    });
     if (reg.present === "present" || reg.present === "N/A") {
       if (event.investment_type === "acculturation")
         acculturation += event.investment_points;

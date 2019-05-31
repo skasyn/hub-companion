@@ -26,3 +26,11 @@
 #content-layout {
     text-align: center;
 }
+
+.bold-text {
+    font-weight: bolder;
+}
+
+.second-table {
+    background-color: whitesmoke;
+}
