@@ -39,7 +39,7 @@ export class WallitList extends Component {
 
     render() {
         return (
-            <div>
+            <div class="list-activities">
                 <List
                     itemLayout="horizontal"
                     dataSource={this.props.elem}
