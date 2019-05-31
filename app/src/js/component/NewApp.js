@@ -34,23 +34,40 @@ class CompMiddleContent extends React.Component {
         if (this.props.activities.length === 0)
             this.props.fetchAuto(this.props.id);
     
+        switch (this.props.content) {
+            case 1:
+                return (
+                    <div>
+                        <h1>Welcome, {this.props.name}</h1>
+                        <IntraImg/>
+                        <Charts/>
+                        <Disconnect/>
+                        <Refresh/>
+                    </div>
+                )
+            case 2:
+                return (
+                    <div>
+                        <ListActivities/>
+                    </div>
+                )
+            case 3:
+                return (
+                    <div>
+
+                    </div>
+                )
+            case 4:
+                return (
+                    <div>
+
+                    </div>
+                )
+            default:
+                return (<div></div>)
+        }
         if (this.props.content === 1) {
-            return (
-                <div>
-                    <h1>Hub Companion</h1>
-                    <h1>Welcome, {this.props.name}</h1>
-                    <IntraImg/>
-                    <Charts/>
-                    <Disconnect/>
-                    <Refresh/>
-                </div>
-            )
         } else if (this.props.content === 2) {
-            return (
-                <div>
-                    <ListActivities/>
-                </div>
-            )
         } else {
             return (<h1> </h1>)
         }
@@ -78,8 +95,12 @@ class SiderComponent extends React.Component {
                         <span>Activities</span>
                     </Menu.Item>
                     <Menu.Item key="3" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(3)}>
-                        <Icon type="form" style={{fontSize: '1em'}} />
-                        <span>Submissions</span>
+                        <Icon type="experiment" style={{fontSize: '1em'}} />
+                        <span>Maker</span>
+                    </Menu.Item>
+                    <Menu.Item key="4" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(4)}>
+                        <Icon type="team" style={{fontSize: '1em'}} />
+                        <span>Sharing</span>
                     </Menu.Item>
                 </Menu>
             </Sider>
@@ -101,6 +122,10 @@ class HeaderComponent extends React.Component {
                             onClick={this.props.toggle}
                         />
                     </Col>
+                    <Col span={20}>
+                        <h1>Hub Companion</h1>
+                    </Col>
+                    <Col span={2}></Col>
                 </div>
             </Header>
         )

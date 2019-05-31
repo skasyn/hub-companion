@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Avatar, Button, List} from 'antd/lib/index'
+import {Avatar, Button, List, Table, Tag } from 'antd/lib/index'
 
 export class LoadingButton extends Component {
 
@@ -15,14 +15,14 @@ export class LoadingButton extends Component {
     render() {
         if (this.props.url !== '') {
             return (
-                <Button type="primary" loading={this.state.loading} onClick={this.enterLoading}  href={this.props.url}>
-                    {this.props.message}
+                <Button type="primary" loading={this.state.loading} onClick={this.enterLoading}  href={this.props.url} block>
+                    {this.props.messageone}
                 </Button>
             )
         } else {
             return (
-                <Button type="primary" loading={this.state.loading} onClick={this.enterLoading}>
-                    {this.props.message}
+                <Button type="primary" loading={this.state.loading} onClick={this.enterLoading} block>
+                    {this.props.messagetwo}
                 </Button>
             )
         }
@@ -33,7 +33,6 @@ LoadingButton.defaultProps = {
     href: '',
     message: "Loading"
 }
-
 
 export class WallitList extends Component {
 
