@@ -158,21 +158,23 @@ function activityUpsert(event, activity, studentList, hubModule) {
   });
 }
 
-function makerUpsert(newMaker) {
+function makerUpsert(newMaker, response) {
+  console.log(newMaker)
   if (newMaker.id !== -1) {
     Maker.create(
         {
           title: newMaker.title,
-          leader_email: newMaker.leader_email,
-          co_workers: newMaker.co_workers,
+          leader_email: newMaker.email,
+          co_workers: newMaker.coworker_email,
           description: newMaker.description,
           functionalities: newMaker.functionalities,
           technologies: newMaker.technologies,
           ressources: newMaker.ressources,
-          informations: newMaker.informations,
+          informations: newMaker.information,
           status: 0,
         },
-        function (err, res) {
+        (err, res) => {
+          response.json({})
         }
     )
   } else {
@@ -180,15 +182,17 @@ function makerUpsert(newMaker) {
       _id: newMaker.id
     }, {
       title: newMaker.title,
-      leader_email: newMaker.leader_email,
-      co_workers: newMaker.co_workers,
+      leader_email: newMaker.email,
+      co_workers: newMaker.coworker_email,
       description: newMaker.description,
       functionalities: newMaker.functionalities,
       technologies: newMaker.technologies,
       ressources: newMaker.ressources,
-      informations: newMaker.informations,
+      informations: newMaker.information,
       status: newMaker.status,
-    }, {upsert: true}, function (err, res) {
+    }, {upsert: true},
+        (err, res) => {
+      response.json({})
     })
   }
 }
@@ -307,16 +311,8 @@ app.post("/api/logincookie", (req, resPost) => {
   })
 })
 
-app.post('api/submitMaker', (req, res) => {
-  return makerUpsert(req.body)
-      .then(function () {
-        res.json({})
-      }).catch(function (err) {
-        console.log(err);
-        res.json({
-          error: true
-        })
-      })
+app.post('/api/submitMaker', (req, res) => {
+  return makerUpsert(req.body, res)
 });
 
 app.post("/api/login", (req, res) => {
