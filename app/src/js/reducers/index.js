@@ -46,6 +46,8 @@ function rootReducer(state = initialState, action) {
         });
       }
     break;
+    case LOGIN_FINISHED:
+    break;
 
     case DISCONNECT:
       cookie.remove("id");
@@ -65,7 +67,6 @@ function rootReducer(state = initialState, action) {
         error: '',
         content: 1,
       });
-    break;
 
     case REFRESH: 
     break;
@@ -81,13 +82,11 @@ function rootReducer(state = initialState, action) {
         },
         plan: action.payload.data.plan
       })
-    break;
 
     case CONTENT_CHANGE:
       return Object.assign({}, state, {
         content: action.payload
       })
-    break;
 
     default:
     break;

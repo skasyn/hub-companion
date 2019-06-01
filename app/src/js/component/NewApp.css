@@ -14,7 +14,6 @@
 
 #sider-component .logo {
     height: 32px;
-    /* background: rgba(255, 255, 255, 0.2); */
     text-align: center;
     margin: 16px;
 }
@@ -25,4 +24,21 @@
 
 #content-layout {
     text-align: center;
+}
+
+.bold-text {
+    font-weight: bolder;
+}
+
+.second-table {
+    background-color: whitesmoke;
+}
+
+.badge-dot sup {
+    width: 12px;
+    height: 12px;
+}
+
+.ant-badge {
+    font-size: inherit;
 }

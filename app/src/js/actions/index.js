@@ -1,8 +1,8 @@
-export const LOGIN_OFFICE = 'LOGIN_OFFICE';
-export const LOGIN_COOKIE = 'LOGIN_COOKIE';
-export const LOGIN_FINISHED = 'LOGIN_FINISHED';
-export const FETCH_INFOS = 'FETCH_INFOS';
-export const DISCONNECT = 'DISCONNECT';
+export const LOGIN_OFFICE = 'LOGIN_OFFICE'
+export const LOGIN_COOKIE = 'LOGIN_COOKIE'
+export const LOGIN_FINISHED = 'LOGIN_FINISHED'
+export const FETCH_INFOS = 'FETCH_INFOS'
+export const DISCONNECT = 'DISCONNECT'
 export const REFRESH = 'REFRESH';
 export const CONTENT_CHANGE = 'CONTENT_CHANGE';
 export const SUBMIT_MAKER = 'SUBMIT_MAKER';
@@ -115,7 +115,7 @@ export function disconnect() {
 
 export function refresh() {
   return function(dispatch) {
-    fetch('api/refresh', {
+    fetch(`api/refresh`, {
       accept: "application/json",
       method: "post"
     });
