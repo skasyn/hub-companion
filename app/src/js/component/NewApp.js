@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu, Icon, Col, Avatar, Row } from 'antd/lib/index';
+import { Layout, Menu, Icon, Col, Avatar } from 'antd/lib/index';
 import logo from '../../wallit.png';
 import './NewApp.css'
 import Disconnect from "./Disconnect";
@@ -66,11 +66,6 @@ class CompMiddleContent extends React.Component {
             default:
                 return (<div></div>)
         }
-        if (this.props.content === 1) {
-        } else if (this.props.content === 2) {
-        } else {
-            return (<h1> </h1>)
-        }
     }    
 }
 
@@ -78,8 +73,16 @@ const MiddleContent = connect(ContentMapStateToProps, ContentMapDispatchToProps)
 
 /*************************/
 
-class SiderComponent extends React.Component {
+const SiderMapStateToProps = state => {
+    return {
+        activities: state.activities,
+    }
+}
+
+class CompSiderComponent extends React.Component {
     render() {
+        // let count = this.props.activities.filter((elem) => { return elem.present === null }).length;
+
         return (
             <Sider trigger={null} collapsible collapsed={this.props.collapsed} id="sider-component">
                 <div className="logo">
@@ -107,6 +110,8 @@ class SiderComponent extends React.Component {
         )
     }
 }
+
+const SiderComponent = connect(SiderMapStateToProps)(CompSiderComponent);
 
 /*************************/
 

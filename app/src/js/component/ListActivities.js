@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { Table, Tag } from 'antd/lib/index';
+import { Table, Tag, Badge } from 'antd/lib/index';
 import '../../App.css';
 import './NewApp.css';
 
@@ -23,11 +23,20 @@ class CompListActivities extends React.Component {
       color = "#fa541c";
       message = "Absent";
     }
-    return (
-      <Tag color={color} key={present} className="bold-text">
-        {message.toUpperCase()}
-      </Tag>
-    )
+    if (message === "Incomming")
+      return (
+        <Badge dot={true} showZero className="badge-dot" offset={[-7, 0]}>
+          <Tag color={color} key={present} className="bold-text">
+            {message.toUpperCase()}
+          </Tag>
+        </Badge>
+      )
+    else
+      return (
+        <Tag color={color} key={present} className="bold-text">
+          {message.toUpperCase()}
+        </Tag>
+      )
   }
 
   typeTag(type) {

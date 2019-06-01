@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Icon, Col, Avatar, Row } from 'antd/lib/index';
+import { Icon, Col, Row } from 'antd/lib/index';
 import { connect } from 'react-redux';
 import { login, loginCookie } from '../actions/index';
 import '../../App.css';

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Avatar, Button, List, Tag } from 'antd/lib/index'
+import { Button } from 'antd/lib/index'
 
 export class LoadingButton extends Component {
 
