@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu, Icon, Col, Avatar, Row, Button } from 'antd/lib/index';
+import { Layout, Menu, Icon, Col, Avatar, Row, Button, Badge } from 'antd/lib/index';
 import { connect } from "react-redux";
 
 import logo from '../../wallit.png';
@@ -147,11 +147,16 @@ const SiderComponent = connect(SiderMapStateToProps)(CompSiderComponent);
 const HeaderMapStateToProps = state => {
     return {
         name: state.name,
+        year: state.year,
+        plan: state.plan,
     }
 }
 
 class CompHeaderComponent extends React.Component {
     render() {
+        let alert = 0;
+        if (this.props.year === 0 || this.props.plan === undefined)
+            alert = 1;
         return (
             <Header style={{ background: '#fff', padding: 0, height: 'initial'}}>
                 <div>
@@ -170,13 +175,27 @@ class CompHeaderComponent extends React.Component {
                         <Col span={3}>
                             <Menu mode="horizontal" selectable={false}>
                                 <SubMenu title={
-                                    <span>
-                                        <Icon type="user"/>
-                                        {this.props.name}
-                                    </span>
+                                        <span>
+                                            {alert !== 0 &&
+                                                <Badge showZero={false} dot={true} offset={[-10, 0]}>
+                                                    <Icon type="user"/>
+                                                </Badge>
+                                            }
+                                            {alert === 0 &&
+                                                <Icon type="user"/>
+                                            }
+                                            {this.props.name}
+                                        </span>
                                 }>
                                     <Menu.Item key="1" onClick={() => this.props.changeContentClick(10)}>
-                                        <Icon type="setting"/>
+                                        {alert !== 0 &&
+                                            <Badge showZero={false} dot={true} offset={[-10, 0]}>
+                                                <Icon type="setting"/>
+                                            </Badge>
+                                        }
+                                        {alert === 0 &&
+                                            <Icon type="setting"/>
+                                        }
                                         Settings
                                     </Menu.Item>
                                 </SubMenu>
