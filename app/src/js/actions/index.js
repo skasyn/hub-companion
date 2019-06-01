@@ -6,6 +6,8 @@ export const DISCONNECT = 'DISCONNECT'
 export const REFRESH = 'REFRESH';
 export const CONTENT_CHANGE = 'CONTENT_CHANGE';
 export const SUBMIT_MAKER = 'SUBMIT_MAKER';
+export const CHANGE_PLAN = 'CHANGE_PLAN';
+export const CHANGE_YEAR = 'CHANGE_YEAR';
 
 export function login(payload) {
   return function(dispatch) {
@@ -125,4 +127,50 @@ export function refresh() {
 
 export function changeContent(payload) {
   return { type: CONTENT_CHANGE, payload};
+}
+
+export function chosePlan(payload) {
+  return function(dispatch) {
+    fetch(`api/changeplan`, {
+      accept: "application/json",
+      method: "post",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        "id": payload.id,
+        "plan": payload.plan
+      })
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      dispatch({
+        type: CHANGE_PLAN,
+        payload: {
+          plan: data.plan
+        }
+      })
+    })
+  }
+}
+
+export function choseYear(payload) {
+  return function(dispatch) {
+    fetch(`api/changeyear`, {
+      accept: "application/json",
+      method: "post",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        "id": payload.id,
+        "year": payload.year
+      })
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      dispatch({
+        type: CHANGE_YEAR,
+        payload: {
+          year: payload.year
+        }
+      })
+    })
+  }
 }

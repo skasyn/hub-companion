@@ -68,3 +68,17 @@ h1, h2, h3, h4, h5, h6 {
 .not-logged {
   text-align: center;
 }
+
+.selected-card {
+  border: 10px solid #a0d911;
+}
+
+.greyed-card {
+  background-color: gray;
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+.clickable-card {
+  cursor: pointer;
+}

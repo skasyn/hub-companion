@@ -49,6 +49,7 @@ const UserSchema = mongoose.Schema({
   name: String,
   mail: String,
   token: String,
+  year: { type: Number, default: 0},
   plan: { type: Number, default: -1},
   acculturation: {type: Number, default: 0},
   experimentation: {type: Number, default: 0},
@@ -271,7 +272,8 @@ function getUserInfos(res, req, resPost, user) {
     experimentation: experimentation,
     fruition: user.fruition,
     sharing: user.sharing,
-    plan: credit_plan[3]
+    plan: credit_plan[user.plan],
+    year: user.year
   });
 }
 
@@ -319,6 +321,26 @@ app.post('api/submitMaker', (req, res) => {
       })
 });
 
+app.post('/api/changeplan', (req, resPost) => {
+  return User.updateOne({
+    id: req.body.id
+  }, {
+    plan: req.body.plan
+  }, (err, res) => {
+    resPost.json({plan: credit_plan[req.body.plan]});
+  });
+})
+
+app.post('/api/changeyear', (req, resPost) => {
+  return User.updateOne({
+    id: req.body.id
+  }, {
+    year: req.body.year
+  }, (err, res) => {
+    resPost.json({});
+  });
+})
+
 app.post("/api/login", (req, res) => {
   return axios.post("https://login.microsoftonline.com/common/oauth2/v2.0/token",
   querystring.stringify({
@@ -336,7 +358,7 @@ app.post("/api/login", (req, res) => {
         error: false,
         name: response2.data.displayName,
         mail: response2.data.mail,
-        id: response2.data.id,
+        id: response2.data.id
       });
       User.updateOne({
         id: response2.data.id

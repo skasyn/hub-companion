@@ -1,6 +1,6 @@
 import cookie from 'react-cookie';
 
-import { LOGIN_OFFICE, LOGIN_COOKIE, LOGIN_FINISHED, FETCH_INFOS, DISCONNECT, REFRESH, CONTENT_CHANGE } from "../actions/index";
+import { LOGIN_OFFICE, LOGIN_COOKIE, LOGIN_FINISHED, FETCH_INFOS, DISCONNECT, REFRESH, CONTENT_CHANGE, CHANGE_PLAN, CHANGE_YEAR } from "../actions/index";
 
 const initialState = {
   is_connected: false,
@@ -14,6 +14,7 @@ const initialState = {
     fruition: 0,
     sharing: 0
   },
+  year: 0,
   plan : {},
   error: '',
   content: 1
@@ -80,12 +81,23 @@ function rootReducer(state = initialState, action) {
           fruition: action.payload.data.fruition,
           sharing: action.payload.data.sharing
         },
-        plan: action.payload.data.plan
+        plan: action.payload.data.plan,
+        year: action.payload.data.year,
       })
 
     case CONTENT_CHANGE:
       return Object.assign({}, state, {
         content: action.payload
+      })
+
+    case CHANGE_PLAN:
+      return Object.assign({}, state, {
+        plan: action.payload.plan
+      })
+
+    case CHANGE_YEAR:
+      return Object.assign({}, state, {
+        year: action.payload.year
       })
 
     default:

@@ -1,17 +1,20 @@
 import React from 'react'
-import { Layout, Menu, Icon, Col, Avatar } from 'antd/lib/index';
+import { Layout, Menu, Icon, Col, Avatar, Row, Button } from 'antd/lib/index';
+import { connect } from "react-redux";
+
 import logo from '../../wallit.png';
 import './NewApp.css'
 import Disconnect from "./Disconnect";
 import Refresh from "./Refresh";
 import ListActivities from "./ListActivities";
-import IntraImg from "./IntraImg";
 import Charts from "./Charts";
 import { fetchInfos } from "../actions/index";
 import '../../App.css';
-import { connect } from "react-redux";
 import { changeContent } from '../actions/index';
+import Settings from "./Settings";
 //import { InterfaceMaker } from "./InterfaceMaker";
+
+const { SubMenu } = Menu;
 
 const { Header, Sider, Content } = Layout;
 
@@ -26,21 +29,25 @@ const ContentMapStateToProps = state => {
         content: state.content,
         id: state.id,
         activities: state.activities,
-        name: state.name
+        name: state.name,
+        year: state.year,
+        plan: state.plan,
     }
 }
 
 class CompMiddleContent extends React.Component {
     render() {
+        let content = this.props.content;
+
         if (this.props.activities.length === 0)
             this.props.fetchAuto(this.props.id);
+        if ((this.props.year === 0 || this.props.plan === undefined) && content === 1)
+            content = 11;
     
-        switch (this.props.content) {
+        switch (content) {
             case 1:
                 return (
                     <div>
-                        <h1>Welcome, {this.props.name}</h1>
-                        <IntraImg/>
                         <Charts/>
                         <Disconnect/>
                         <Refresh/>
@@ -64,6 +71,26 @@ class CompMiddleContent extends React.Component {
 
                     </div>
                 )
+            case 10:
+                return (
+                    <Settings/>
+                )
+            case 11:
+                return (
+                    <div>
+                        <Row style={{paddingTop: "30vh"}}>
+                            <h1>You must select your current year and credit plan</h1>
+                            <Col span={7}/>
+                            <Col span={10}>
+                                <Button className="danger-button" type="danger" block onClick={() => this.props.changeContentClick(10)} >
+                                    <Icon type="setting"/>
+                                    Settings
+                                </Button>
+                            </Col>
+                            <Col span={7}/>
+                        </Row>
+                    </div>
+                )
             default:
                 return (<div/>)
         }
@@ -77,6 +104,7 @@ const MiddleContent = connect(ContentMapStateToProps, ContentMapDispatchToProps)
 const SiderMapStateToProps = state => {
     return {
         activities: state.activities,
+        content: state.content,
     }
 }
 
@@ -89,7 +117,7 @@ class CompSiderComponent extends React.Component {
                 <div className="logo">
                     <Avatar src={logo} />
                 </div>
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} >
+                <Menu theme="dark" mode="inline" selectedKeys={[this.props.content.toString()]} >
                     <Menu.Item key="1" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(1)}>
                         <Icon type="dashboard" style={{fontSize: '1em'}} />
                         <span>Dashboard</span>
@@ -116,27 +144,52 @@ const SiderComponent = connect(SiderMapStateToProps)(CompSiderComponent);
 
 /*************************/
 
-class HeaderComponent extends React.Component {
+const HeaderMapStateToProps = state => {
+    return {
+        name: state.name,
+    }
+}
+
+class CompHeaderComponent extends React.Component {
     render() {
         return (
             <Header style={{ background: '#fff', padding: 0, height: 'initial'}}>
                 <div>
-                    <Col span={2}>
-                        <Icon
-                            className="trigger"
-                            type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
-                            onClick={this.props.toggle}
-                        />
-                    </Col>
-                    <Col span={20}>
-                        <h1>Hub Companion</h1>
-                    </Col>
-                    <Col span={2}></Col>
+                    <Row>
+                        <Col span={1}>
+                            <Icon
+                                className="trigger"
+                                type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
+                                onClick={this.props.toggle}
+                            />
+                        </Col>
+                        <Col span={2}/>
+                        <Col span={18}>
+                            Hub Companion
+                        </Col>
+                        <Col span={3}>
+                            <Menu mode="horizontal" selectable={false}>
+                                <SubMenu title={
+                                    <span>
+                                        <Icon type="user"/>
+                                        {this.props.name}
+                                    </span>
+                                }>
+                                    <Menu.Item key="1" onClick={() => this.props.changeContentClick(10)}>
+                                        <Icon type="setting"/>
+                                        Settings
+                                    </Menu.Item>
+                                </SubMenu>
+                            </Menu>
+                        </Col>
+                    </Row>
                 </div>
             </Header>
         )
     }
 }
+
+const HeaderComponent = connect(HeaderMapStateToProps)(CompHeaderComponent);
 
 /*************************/
 
@@ -162,7 +215,7 @@ class SiderDemo extends React.Component {
             <Layout style={{minWidth: '100%'}} id="layout">
                 <SiderComponent collapsed={this.state.collapsed} changeContentClick={this.props.changeContentClick}/>
                 <Layout id="content-layout">
-                    <HeaderComponent collapsed={this.state.collapsed} toggle={this.toggle}/>
+                    <HeaderComponent collapsed={this.state.collapsed} toggle={this.toggle} changeContentClick={this.props.changeContentClick}/>
                     <Content
                         style={{
                             padding: 0,
@@ -170,7 +223,7 @@ class SiderDemo extends React.Component {
                             height: '100%',
                         }}
                     >
-                        <MiddleContent/>
+                        <MiddleContent changeContentClick={this.props.changeContentClick}/>
                     </Content>
                 </Layout>
             </Layout>

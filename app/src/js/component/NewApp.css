@@ -42,3 +42,13 @@
 .ant-badge {
     font-size: inherit;
 }
+
+.danger-button {
+    color: #fff;
+    background-color: #f5222d;
+    border-color: #ff4d4f;
+}
+
+.danger-button:hover {
+    background-color: #ff4d4f;
+}
