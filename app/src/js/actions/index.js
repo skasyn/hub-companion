@@ -1,10 +1,11 @@
-export const LOGIN_OFFICE = 'LOGIN_OFFICE'
-export const LOGIN_COOKIE = 'LOGIN_COOKIE'
-export const LOGIN_FINISHED = 'LOGIN_FINISHED'
-export const FETCH_INFOS = 'FETCH_INFOS'
-export const DISCONNECT = 'DISCONNECT'
+export const LOGIN_OFFICE = 'LOGIN_OFFICE';
+export const LOGIN_COOKIE = 'LOGIN_COOKIE';
+export const LOGIN_FINISHED = 'LOGIN_FINISHED';
+export const FETCH_INFOS = 'FETCH_INFOS';
+export const DISCONNECT = 'DISCONNECT';
 export const REFRESH = 'REFRESH';
 export const CONTENT_CHANGE = 'CONTENT_CHANGE';
+export const SUBMIT_MAKER = 'SUBMIT_MAKER';
 
 export function login(payload) {
   return function(dispatch) {
@@ -96,13 +97,25 @@ export function fetchInfos(payload) {
   }
 }
 
+export function submitMakerAction(payload) {
+  return function (dispatch) {
+    fetch('api/submitMaker', {
+      accept: 'application/json',
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    })
+    return { type: SUBMIT_MAKER}
+  }
+}
+
 export function disconnect() {
   return { type: DISCONNECT };
 }
 
 export function refresh() {
   return function(dispatch) {
-    fetch(`api/refresh`, {
+    fetch('api/refresh', {
       accept: "application/json",
       method: "post"
     });

@@ -11,6 +11,7 @@ import { fetchInfos } from "../actions/index";
 import '../../App.css';
 import { connect } from "react-redux";
 import { changeContent } from '../actions/index';
+import { InterfaceMaker } from "./InterfaceMaker";
 
 const { Header, Sider, Content } = Layout;
 
@@ -54,7 +55,7 @@ class CompMiddleContent extends React.Component {
             case 3:
                 return (
                     <div>
-
+                        <InterfaceMaker/>
                     </div>
                 )
             case 4:

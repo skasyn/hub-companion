@@ -26,7 +26,7 @@ class CompPageNotLogged extends React.Component {
       this.props.loginOffice(query.get('code'));
 
     return (
-      <div class="not-logged">
+      <div className="not-logged">
         <h1>Hub Companion</h1>
         <div>
           <Row>

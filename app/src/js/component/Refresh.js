@@ -10,8 +10,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 class CompRefresh extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.refresh = this.refresh.bind(this);
   }

@@ -70,9 +70,23 @@ const ActivitySchema = mongoose.Schema({
   }],
 })
 
+const MakerSchema = mongoose.Schema({
+  title: String,
+  leader_email: String,
+  co_workers: [String],
+  description: String,
+  functionalities: String,
+  technologies: String,
+  ressources: String,
+  informations: String,
+  status: Number,
+});
+
 const Activity = mongoose.model('activity', ActivitySchema);
 
 const User = mongoose.model('user', UserSchema);
+
+const Maker = mongoose.model('maker', MakerSchema)
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
@@ -138,6 +152,38 @@ function activityUpsert(event, activity, studentList, hubModule) {
   });
 }
 
+function makerUpsert(newMaker) {
+  if (newMaker.id !== -1) (
+    Maker.create(
+        {
+          title: newMaker.title,
+          leader_email: newMaker.leader_email,
+          co_workers: newMaker.co_workers,
+          description: newMaker.description,
+          functionalities: newMaker.functionalities,
+          technologies: newMaker.technologies,
+          ressources: newMaker.ressources,
+          informations: newMaker.informations,
+          status: 0,
+        },
+        function (err, res) {}
+    )
+  ) else (
+      Maker.updateOne({
+        _id: newMaker.id
+      }, {
+        title: newMaker.title,
+        leader_email: newMaker.leader_email,
+        co_workers: newMaker.co_workers,
+        description: newMaker.description,
+        functionalities: newMaker.functionalities,
+        technologies: newMaker.technologies,
+        ressources: newMaker.ressources,
+        informations: newMaker.informations,
+        status: newMaker.status,
+      },{upsert: true}, function(err, res) {})
+  )
+}
 function retrieveEvents(year, hubModule, city, event, activity) {
   return axios.get(process.env.URLAUTO + "module/"+year+"/"+hubModule+"/"+city+"-0-1/" + activity.codeacti + "/" + event.code + "/registered?format=json")
   .then(function(response2) {
@@ -244,6 +290,18 @@ app.post("/api/logincookie", (req, resPost) => {
     })
   })
 })
+
+app.post('api/submitMaker', (req, res) => {
+  return makerUpsert(req.body)
+      .then(function () {
+        res.json({})
+      }).catch(function (err) {
+        console.log(err);
+        res.json({
+          error: true
+        })
+      })
+});
 
 app.post("/api/login", (req, res) => {
   return axios.post("https://login.microsoftonline.com/common/oauth2/v2.0/token",
