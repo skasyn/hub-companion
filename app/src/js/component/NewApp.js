@@ -12,7 +12,7 @@ import { fetchInfos } from "../actions/index";
 import '../../App.css';
 import { changeContent } from '../actions/index';
 import Settings from "./Settings";
-//import { InterfaceMaker } from "./InterfaceMaker";
+import InterfaceMaker from "./InterfaceMaker";
 
 const { SubMenu } = Menu;
 
@@ -62,7 +62,7 @@ class CompMiddleContent extends React.Component {
             case 3:
                 return (
                     <div>
-                        {/*<InterfaceMaker/>*/}
+                        <InterfaceMaker/>
                     </div>
                 )
             case 4:

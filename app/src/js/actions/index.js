@@ -100,14 +100,16 @@ export function fetchInfos(payload) {
 }
 
 export function submitMakerAction(payload) {
+  console.log(payload)
   return function (dispatch) {
-    fetch('api/submitMaker', {
+    fetch(`api/submitMaker`, {
       accept: 'application/json',
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(payload)
-    })
-    return { type: SUBMIT_MAKER}
+    }).then(() => {
+      dispatch({ type: SUBMIT_MAKER} )
+    });
   }
 }
 
