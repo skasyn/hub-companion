@@ -73,14 +73,14 @@ class CompListActivities extends React.Component {
   childCreate(row) {
     const columns = [
       {
-        key: '5',
+        key: 'description',
         title: <span className="bold-text">Description</span>,
         dataIndex: "description",
         width: '85%',
         render: description => this.descriptionMultiline(description)
       },
       {
-        key: '6',
+        key: 'date',
         title: <span className="bold-text">Date</span>,
         dataIndex: "date",
         render: date => <span className="bold-text">{date}</span>
@@ -99,22 +99,21 @@ class CompListActivities extends React.Component {
 
   render () {
     let list = "";
-
     const columns = [
       {
-        key: '1',
+        key: 'title',
         title: <span className="bold-text">Title</span>,
         dataIndex: 'title',
         render: title => <span className="bold-text">{title}</span>
       },
       {
-        key: '2',
+        key: 'points',
         title: <span className="bold-text">Points</span>,
         dataIndex: 'points',
         render: points => <span className="bold-text">{points}</span>
       },
       {
-        key: '3',
+        key: 'type',
         title: <span className="bold-text">Type</span>,
         dataIndex: 'type',
         render: type => (
@@ -122,7 +121,7 @@ class CompListActivities extends React.Component {
         )
       },
       {
-        key: '4',
+        key: 'present',
         title: <span className="bold-text">Presence</span>,
         dataIndex: 'present',
         render: present => (
@@ -131,7 +130,9 @@ class CompListActivities extends React.Component {
       }
     ];
 
-
+    this.props.activities.forEach((element, key) => {
+      element.key = key;
+    });
     if (this.props.activities.length > 0) {
       list = (
         <div className="list-activities">
