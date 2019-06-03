@@ -8,6 +8,7 @@ const initialState = {
   mail: '',
   id: '',
   activities : [],
+  received_activities: false,
   points: {
     acculturation: 0,
     experimentation: 0,
@@ -75,6 +76,7 @@ function rootReducer(state = initialState, action) {
     case FETCH_INFOS:
       return Object.assign({}, state, {
         activities: action.payload.data.events,
+        received_activities: true,
         points: {
           acculturation: action.payload.data.acculturation,
           experimentation: action.payload.data.experimentation,

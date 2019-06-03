@@ -54,16 +54,33 @@ class CompListActivities extends React.Component {
     )
   }
 
+  descriptionMultiline(description)
+  {
+    return (
+      <span className="bold-text">
+        {description.split("\n").map(function(item, key) {
+          return (
+            <span key={key}>
+              {item}
+              <br />
+            </span>
+          )
+        })}
+      </span>
+    )
+  }
+
   childCreate(row) {
     const columns = [
       {
+        key: '5',
         title: <span className="bold-text">Description</span>,
         dataIndex: "description",
         width: '85%',
-        key: 'description',
-        render: description => <span className="bold-text">{description}</span>
+        render: description => this.descriptionMultiline(description)
       },
       {
+        key: '6',
         title: <span className="bold-text">Date</span>,
         dataIndex: "date",
         render: date => <span className="bold-text">{date}</span>
@@ -85,17 +102,19 @@ class CompListActivities extends React.Component {
 
     const columns = [
       {
+        key: '1',
         title: <span className="bold-text">Title</span>,
         dataIndex: 'title',
-        key: 'rowKey',
         render: title => <span className="bold-text">{title}</span>
       },
       {
+        key: '2',
         title: <span className="bold-text">Points</span>,
         dataIndex: 'points',
         render: points => <span className="bold-text">{points}</span>
       },
       {
+        key: '3',
         title: <span className="bold-text">Type</span>,
         dataIndex: 'type',
         render: type => (
@@ -103,6 +122,7 @@ class CompListActivities extends React.Component {
         )
       },
       {
+        key: '4',
         title: <span className="bold-text">Presence</span>,
         dataIndex: 'present',
         render: present => (
@@ -114,9 +134,8 @@ class CompListActivities extends React.Component {
 
     if (this.props.activities.length > 0) {
       list = (
-        <div class="list-activities">
+        <div className="list-activities">
           <Table
-            className="first-table"
             columns={columns}
             dataSource={this.props.activities}
             expandedRowRender={(row) => this.childCreate(row)}

@@ -14,6 +14,16 @@ import { changeContent } from '../actions/index';
 import Settings from "./Settings";
 import InterfaceMaker from "./InterfaceMaker";
 
+const Contents = {
+    DASHBOARD: 1,
+    ACTIVITIES: 2,
+    MAKER: 3,
+    SHARING: 4,
+    SETTINGS: 5,
+    ALERTNOYEAR: 6,
+    DEFAULT: 7
+}
+
 const { SubMenu } = Menu;
 
 const { Header, Sider, Content } = Layout;
@@ -29,6 +39,7 @@ const ContentMapStateToProps = state => {
         content: state.content,
         id: state.id,
         activities: state.activities,
+        received_activities: state.received_activities,
         name: state.name,
         year: state.year,
         plan: state.plan,
@@ -39,13 +50,15 @@ class CompMiddleContent extends React.Component {
     render() {
         let content = this.props.content;
 
-        if (this.props.activities.length === 0)
-            this.props.fetchAuto(this.props.id);
         if ((this.props.year === 0 || this.props.plan === undefined) && content === 1)
-            content = 11;
+            content = Contents.ALERTNOYEAR;
+        if (this.props.received_activities === false) {
+            this.props.fetchAuto(this.props.id);
+            content = Contents.DEFAULT;
+        }
     
         switch (content) {
-            case 1:
+            case Contents.DASHBOARD:
                 return (
                     <div>
                         <Charts/>
@@ -53,36 +66,36 @@ class CompMiddleContent extends React.Component {
                         <Refresh/>
                     </div>
                 )
-            case 2:
+            case Contents.ACTIVITIES:
                 return (
                     <div>
                         <ListActivities/>
                     </div>
                 )
-            case 3:
+            case Contents.MAKER:
                 return (
                     <div>
                         <InterfaceMaker/>
                     </div>
                 )
-            case 4:
+            case Contents.SHARING:
                 return (
                     <div>
 
                     </div>
                 )
-            case 10:
+            case Contents.SETTINGS:
                 return (
                     <Settings/>
                 )
-            case 11:
+            case Contents.ALERTNOYEAR:
                 return (
                     <div>
                         <Row style={{paddingTop: "30vh"}}>
                             <h1>You must select your current year and credit plan</h1>
                             <Col span={7}/>
                             <Col span={10}>
-                                <Button className="danger-button" type="danger" block onClick={() => this.props.changeContentClick(10)} >
+                                <Button className="danger-button" type="danger" block onClick={() => this.props.changeContentClick(Contents.SETTINGS)} >
                                     <Icon type="setting"/>
                                     Settings
                                 </Button>
@@ -90,6 +103,10 @@ class CompMiddleContent extends React.Component {
                             <Col span={7}/>
                         </Row>
                     </div>
+                )
+            case Contents.DEFAULT:
+                return (
+                    <div/>
                 )
             default:
                 return (<div/>)
@@ -118,19 +135,19 @@ class CompSiderComponent extends React.Component {
                     <Avatar src={logo} />
                 </div>
                 <Menu theme="dark" mode="inline" selectedKeys={[this.props.content.toString()]} >
-                    <Menu.Item key="1" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(1)}>
+                    <Menu.Item key="1" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(Contents.DASHBOARD)}>
                         <Icon type="dashboard" style={{fontSize: '1em'}} />
                         <span>Dashboard</span>
                     </Menu.Item>
-                    <Menu.Item key="2" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(2)}>
+                    <Menu.Item key="2" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(Contents.ACTIVITIES)}>
                         <Icon type="database" style={{fontSize: '1em'}} />
                         <span>Activities</span>
                     </Menu.Item>
-                    <Menu.Item key="3" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(3)}>
+                    <Menu.Item key="3" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(Contents.MAKER)}>
                         <Icon type="experiment" style={{fontSize: '1em'}} />
                         <span>Maker</span>
                     </Menu.Item>
-                    <Menu.Item key="4" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(4)}>
+                    <Menu.Item key="4" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(Contents.SHARING)}>
                         <Icon type="team" style={{fontSize: '1em'}} />
                         <span>Sharing</span>
                     </Menu.Item>
@@ -187,7 +204,7 @@ class CompHeaderComponent extends React.Component {
                                             {this.props.name}
                                         </span>
                                 }>
-                                    <Menu.Item key="1" onClick={() => this.props.changeContentClick(10)}>
+                                    <Menu.Item key="1" onClick={() => this.props.changeContentClick(Contents.SETTINGS)}>
                                         {alert !== 0 &&
                                             <Badge showZero={false} dot={true} offset={[-10, 0]}>
                                                 <Icon type="setting"/>
