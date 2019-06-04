@@ -54,7 +54,8 @@ const UserSchema = mongoose.Schema({
   acculturation: {type: Number, default: 0},
   experimentation: {type: Number, default: 0},
   fruition: {type: Number, default: 0},
-  sharing: {type: Number, default: 0}
+  sharing: {type: Number, default: 0},
+  privilege: {type: Number, default: 0},
 });
 
 const ActivitySchema = mongoose.Schema({
@@ -160,8 +161,7 @@ function activityUpsert(event, activity, studentList, hubModule) {
 }
 
 function makerUpsert(newMaker, response) {
-  console.log(newMaker)
-  if (newMaker.id !== -1) {
+  if (newMaker._id === undefined) {
     Maker.create(
         {
           title: newMaker.title,
@@ -180,7 +180,7 @@ function makerUpsert(newMaker, response) {
     )
   } else {
     Maker.updateOne({
-      _id: newMaker.id
+      _id: newMaker._id
     }, {
       title: newMaker.title,
       leader_email: newMaker.email,
@@ -277,7 +277,8 @@ function getUserInfos(res, req, resPost, user) {
     fruition: user.fruition,
     sharing: user.sharing,
     plan: credit_plan[user.plan],
-    year: user.year
+    year: user.year,
+    privilege: user.privilege,
   });
 }
 
@@ -293,6 +294,25 @@ app.post("/api/infos", (req, resPost) => {
     })
   }).catch(function(err) {
     console.log(err);
+  })
+})
+
+app.post("/api/admininfos", (req, resPost) => {
+  let user = {};
+
+  return User.findOne({id: req.body.id},
+  (err, res) => {
+    user = res;
+  }).then(function(res) {
+    if (user.privilege === 0)
+      resPost.json({});
+    else {
+      Maker.find({},
+      (err, res) => {
+        resPost.json({maker: res});
+      });
+    }
+  }).catch(function(err) {
   })
 })
 

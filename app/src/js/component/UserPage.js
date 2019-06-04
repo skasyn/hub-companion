@@ -3,7 +3,7 @@ import { Layout, Menu, Icon, Col, Avatar, Row, Button, Badge } from 'antd/lib/in
 import { connect } from "react-redux";
 
 import logo from '../../wallit.png';
-import './NewApp.css'
+import './Components.css';
 import Disconnect from "./Disconnect";
 import Refresh from "./Refresh";
 import ListActivities from "./ListActivities";
@@ -127,8 +127,6 @@ const SiderMapStateToProps = state => {
 
 class CompSiderComponent extends React.Component {
     render() {
-        // let count = this.props.activities.filter((elem) => { return elem.present === null }).length;
-
         return (
             <Sider trigger={null} collapsible collapsed={this.props.collapsed} id="sider-component">
                 <div className="logo">
@@ -229,13 +227,13 @@ const HeaderComponent = connect(HeaderMapStateToProps)(CompHeaderComponent);
 
 /*************************/
 
-function SiderMapDispatchToProps(dispatch) {
+function UserMapDispatchToProps(dispatch) {
     return {
       changeContentClick: content => dispatch(changeContent(content))
     }
 }
 
-class SiderDemo extends React.Component {
+class UserPage extends React.Component {
     state = {
         collapsed: false,
     };
@@ -267,4 +265,4 @@ class SiderDemo extends React.Component {
     }
 }
 
-export default connect(null, SiderMapDispatchToProps)(SiderDemo);
+export default connect(null, UserMapDispatchToProps)(UserPage);

@@ -20,10 +20,13 @@
 
 #sider-component {
     text-align: initial;
+    min-width: 0 !important;
+    width: 0 !important;
 }
 
 #content-layout {
     text-align: center;
+    flex: 0 1 calc(100vw - 200px);
 }
 
 .bold-text {

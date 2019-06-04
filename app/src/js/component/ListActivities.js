@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from "react-redux";
 import { Table, Tag, Badge } from 'antd/lib/index';
 import '../../App.css';
-import './NewApp.css';
+import './Components.css';
 
 const mapStateToProps = state => {
   return {
@@ -83,6 +83,7 @@ class CompListActivities extends React.Component {
         key: 'date',
         title: <span className="bold-text">Date</span>,
         dataIndex: "date",
+        width: '15%',
         render: date => <span className="bold-text">{date}</span>
       }
     ];

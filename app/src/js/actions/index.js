@@ -2,6 +2,7 @@ export const LOGIN_OFFICE = 'LOGIN_OFFICE'
 export const LOGIN_COOKIE = 'LOGIN_COOKIE'
 export const LOGIN_FINISHED = 'LOGIN_FINISHED'
 export const FETCH_INFOS = 'FETCH_INFOS'
+export const ADMIN_INFOS = 'ADMIN_INFOS';
 export const DISCONNECT = 'DISCONNECT'
 export const REFRESH = 'REFRESH';
 export const CONTENT_CHANGE = 'CONTENT_CHANGE';
@@ -99,8 +100,29 @@ export function fetchInfos(payload) {
   }
 }
 
+export function fetchAdminInfos(payload) {
+  return function(dispatch) {
+    fetch(`api/admininfos`, {
+      accept: "application/json",
+      method: "post",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        "id": payload
+      })
+    })
+    .then(response => response.json())
+    .then((data) => {
+      dispatch({
+        type: ADMIN_INFOS,
+        payload: {
+          data: data
+        }
+      })
+    })
+  } 
+}
+
 export function submitMakerAction(payload) {
-  console.log(payload)
   return function (dispatch) {
     fetch(`api/submitMaker`, {
       accept: 'application/json',
