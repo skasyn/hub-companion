@@ -10,6 +10,7 @@
     "mongoose": "^5.5.8",
     "react-animations": "^1.0.0",
     "react-cookie": "^1.0.5",
+    "react-highlight-words": "^0.16.0",
     "redux": "^4.0.1",
     "styled-components": "^4.2.1"
   },

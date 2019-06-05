@@ -9,15 +9,16 @@ import Disconnect from "./Disconnect";
 import Refresh from "./Refresh";
 import { fetchAdminInfos } from "../actions/index";
 import { changeContent } from '../actions/index';
-import Settings from "./Settings";
 import AdminMaker from "./AdminMakers";
+import AdminUsers from "./AdminUsers";
 
 const Contents = {
     MENU: 1,
     MAKER: 2,
     SHARING: 3,
-    SETTINGS: 4,
-    DEFAULT: 5
+    USERS: 4,
+    SETTINGS: 5,
+    DEFAULT: 6
 }
 
 const { SubMenu } = Menu;
@@ -68,7 +69,14 @@ class CompMiddleContent extends React.Component {
                 )
             case Contents.SETTINGS:
                 return (
-                    <Settings/>
+                    <div>
+                    </div>
+                )
+            case Contents.USERS:
+                return (
+                    <div>
+                        <AdminUsers />
+                    </div>
                 )
             case Contents.DEFAULT:
                 return (
@@ -109,6 +117,10 @@ class CompSiderComponent extends React.Component {
                     <Menu.Item key="3" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(Contents.SHARING)}>
                         <Icon type="team" style={{fontSize: '1em'}} />
                         <span>Sharing</span>
+                    </Menu.Item>
+                    <Menu.Item key="4" style={{fontSize: '1.5em'}} onClick={() => this.props.changeContentClick(Contents.USERS)}>
+                        <Icon type="solution" style={{fontSize: '1em'}} />
+                        <span>Users</span>
                     </Menu.Item>
                 </Menu>
             </Sider>

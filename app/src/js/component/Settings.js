@@ -3,30 +3,7 @@ import { connect } from "react-redux";
 import { Select, Row, Col, Card } from 'antd/lib/index';
 import { chosePlan, choseYear } from '../actions/index';
 import '../../App.css';
-
-let credit_plan = [
-  {
-    acculturation: 4,
-    experimentation: 3
-  },
-  {
-    acculturation: 4,
-    experimentation: 3,
-    fruition: 1
-  },
-  {
-    acculturation: 4,
-    experimentation: 3,
-    fruition: 1,
-    sharing: 1
-  },
-  {
-    acculturation: 4,
-    experimentation: 3,
-    fruition: 2,
-    sharing: 2
-  }
-]
+import { credit_plan } from './Plans';
 
 const credit_infos = [
   {

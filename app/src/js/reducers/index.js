@@ -22,6 +22,7 @@ const initialState = {
   privilege: 0,
   makers: [],
   sharings : [],
+  users: [],
 };
 
 function rootReducer(state = initialState, action) {
@@ -79,7 +80,8 @@ function rootReducer(state = initialState, action) {
     case ADMIN_INFOS:
       return Object.assign({}, state, {
         received_activities: true,
-        makers: action.payload.data.maker
+        makers: action.payload.data.makers,
+        users: action.payload.data.users
       })
 
     case CONTENT_CHANGE:

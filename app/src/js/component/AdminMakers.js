@@ -168,7 +168,8 @@ class CompAdminMaker extends React.Component {
         width: '20%',
         render: technologies => this.descriptionMultiline(technologies)
       },
-    ]
+    ];
+
     return (
       <Table
         className="second-table"
@@ -217,9 +218,6 @@ class CompAdminMaker extends React.Component {
       }
     ]
     
-    this.props.makers.sort((a, b) => {
-      return (a.status < b.status)
-    })
     this.props.makers.forEach((element, key) => {
       element.key = key;
     });

@@ -299,18 +299,23 @@ app.post("/api/infos", (req, resPost) => {
 
 app.post("/api/admininfos", (req, resPost) => {
   let user = {};
+  let makers = [];
+  let users = [];
 
-  return User.findOne({id: req.body.id},
-  (err, res) => {
-    user = res;
-  }).then(function(res) {
+  return User.findOne({id: req.body.id}, (err, res) => user = res)
+  .then(() => {
     if (user.privilege === 0)
       resPost.json({});
     else {
-      Maker.find({},
-      (err, res) => {
-        resPost.json({maker: res});
-      });
+      Maker.find({}, (err, res) => makers = res)
+      .then(() => {
+        console.log("here");
+        User.find({}).select("id mail name plan year acculturation experimentation fruition sharing privilege")
+        .exec((err, res) => {
+          users = res;
+          resPost.json({makers: makers, users: users})
+        })
+      })
     }
   }).catch(function(err) {
   })
