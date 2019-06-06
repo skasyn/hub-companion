@@ -80,7 +80,7 @@ class ComponentInterfaceMaker extends Component {
         const coworkerItem = keys.map((k, index) => (
             <Form.Item
                 {...(index === 0 ? formItemLayout : formItemLayout)}
-                label={index === 0 ? 'Coworkers' : ''}
+                label={'Coworker ' + (index + 1)}
                 required={false}
                 key={k}
                 style={{textAlign: 'left'}}

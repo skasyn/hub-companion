@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
+import { Avatar } from 'antd/lib/index';
 import '../../App.css';
 
 const mapStateToProps = state => {
@@ -13,7 +14,7 @@ class CompIntraImg extends React.Component {
     let name = this.props.mail.match(/^[^@]*/);
 
     return (
-      <img src={process.env.REACT_APP_URLAUTO + "file/userprofil/profilview/" + name + ".jpg"} alt={name}></img>
+      <Avatar src={process.env.REACT_APP_URLAUTO + "file/userprofil/profilview/" + name + ".jpg"} alt="user" shape="square"/>
     )
   }
 }

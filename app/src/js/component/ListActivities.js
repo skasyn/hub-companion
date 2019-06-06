@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from "react-redux";
 import { Table, Tag, Badge } from 'antd/lib/index';
 import '../../App.css';
-import './NewApp.css';
+import './Components.css';
 
 const mapStateToProps = state => {
   return {
@@ -54,18 +54,36 @@ class CompListActivities extends React.Component {
     )
   }
 
+  descriptionMultiline(description)
+  {
+    return (
+      <span className="bold-text">
+        {description.split("\n").map(function(item, key) {
+          return (
+            <span key={key}>
+              {item}
+              <br />
+            </span>
+          )
+        })}
+      </span>
+    )
+  }
+
   childCreate(row) {
     const columns = [
       {
+        key: 'description',
         title: <span className="bold-text">Description</span>,
         dataIndex: "description",
         width: '85%',
-        key: 'description',
-        render: description => <span className="bold-text">{description}</span>
+        render: description => this.descriptionMultiline(description)
       },
       {
+        key: 'date',
         title: <span className="bold-text">Date</span>,
         dataIndex: "date",
+        width: '15%',
         render: date => <span className="bold-text">{date}</span>
       }
     ];
@@ -82,20 +100,21 @@ class CompListActivities extends React.Component {
 
   render () {
     let list = "";
-
     const columns = [
       {
+        key: 'title',
         title: <span className="bold-text">Title</span>,
         dataIndex: 'title',
-        key: 'rowKey',
         render: title => <span className="bold-text">{title}</span>
       },
       {
+        key: 'points',
         title: <span className="bold-text">Points</span>,
         dataIndex: 'points',
         render: points => <span className="bold-text">{points}</span>
       },
       {
+        key: 'type',
         title: <span className="bold-text">Type</span>,
         dataIndex: 'type',
         render: type => (
@@ -103,6 +122,7 @@ class CompListActivities extends React.Component {
         )
       },
       {
+        key: 'present',
         title: <span className="bold-text">Presence</span>,
         dataIndex: 'present',
         render: present => (
@@ -111,12 +131,13 @@ class CompListActivities extends React.Component {
       }
     ];
 
-
+    this.props.activities.forEach((element, key) => {
+      element.key = key;
+    });
     if (this.props.activities.length > 0) {
       list = (
-        <div class="list-activities">
+        <div className="list-activities">
           <Table
-            className="first-table"
             columns={columns}
             dataSource={this.props.activities}
             expandedRowRender={(row) => this.childCreate(row)}

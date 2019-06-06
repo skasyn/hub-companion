@@ -49,11 +49,13 @@ const UserSchema = mongoose.Schema({
   name: String,
   mail: String,
   token: String,
+  year: { type: Number, default: 0},
   plan: { type: Number, default: -1},
   acculturation: {type: Number, default: 0},
   experimentation: {type: Number, default: 0},
   fruition: {type: Number, default: 0},
-  sharing: {type: Number, default: 0}
+  sharing: {type: Number, default: 0},
+  privilege: {type: Number, default: 0},
 });
 
 const ActivitySchema = mongoose.Schema({
@@ -159,8 +161,7 @@ function activityUpsert(event, activity, studentList, hubModule) {
 }
 
 function makerUpsert(newMaker, response) {
-  console.log(newMaker)
-  if (newMaker.id !== -1) {
+  if (newMaker._id === undefined) {
     Maker.create(
         {
           title: newMaker.title,
@@ -179,7 +180,7 @@ function makerUpsert(newMaker, response) {
     )
   } else {
     Maker.updateOne({
-      _id: newMaker.id
+      _id: newMaker._id
     }, {
       title: newMaker.title,
       leader_email: newMaker.email,
@@ -275,7 +276,9 @@ function getUserInfos(res, req, resPost, user) {
     experimentation: experimentation,
     fruition: user.fruition,
     sharing: user.sharing,
-    plan: credit_plan[3]
+    plan: credit_plan[user.plan],
+    year: user.year,
+    privilege: user.privilege,
   });
 }
 
@@ -291,6 +294,30 @@ app.post("/api/infos", (req, resPost) => {
     })
   }).catch(function(err) {
     console.log(err);
+  })
+})
+
+app.post("/api/admininfos", (req, resPost) => {
+  let user = {};
+  let makers = [];
+  let users = [];
+
+  return User.findOne({id: req.body.id}, (err, res) => user = res)
+  .then(() => {
+    if (user.privilege === 0)
+      resPost.json({});
+    else {
+      Maker.find({}, (err, res) => makers = res)
+      .then(() => {
+        console.log("here");
+        User.find({}).select("id mail name plan year acculturation experimentation fruition sharing privilege")
+        .exec((err, res) => {
+          users = res;
+          resPost.json({makers: makers, users: users})
+        })
+      })
+    }
+  }).catch(function(err) {
   })
 })
 
@@ -315,6 +342,26 @@ app.post('/api/submitMaker', (req, res) => {
   return makerUpsert(req.body, res)
 });
 
+app.post('/api/changeplan', (req, resPost) => {
+  return User.updateOne({
+    id: req.body.id
+  }, {
+    plan: req.body.plan
+  }, (err, res) => {
+    resPost.json({plan: credit_plan[req.body.plan]});
+  });
+})
+
+app.post('/api/changeyear', (req, resPost) => {
+  return User.updateOne({
+    id: req.body.id
+  }, {
+    year: req.body.year
+  }, (err, res) => {
+    resPost.json({});
+  });
+})
+
 app.post("/api/login", (req, res) => {
   return axios.post("https://login.microsoftonline.com/common/oauth2/v2.0/token",
   querystring.stringify({
@@ -332,7 +379,7 @@ app.post("/api/login", (req, res) => {
         error: false,
         name: response2.data.displayName,
         mail: response2.data.mail,
-        id: response2.data.id,
+        id: response2.data.id
       });
       User.updateOne({
         id: response2.data.id

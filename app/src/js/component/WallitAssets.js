@@ -3,10 +3,19 @@ import { Button } from 'antd/lib/index'
 
 export class LoadingButton extends Component {
 
-    state = {
-        loading: false,
-        iconLoading: false,
-    };
+    constructor(props) {
+        super(props);
+        let loading = false;
+
+        let query = new URLSearchParams(window.location.search);
+        if (query.get('code'))
+            loading = true;
+
+        this.state = {
+            loading: loading,
+            iconLoading: false,
+        };
+    }
 
     enterLoading = () => {
         this.setState({loading: true})
