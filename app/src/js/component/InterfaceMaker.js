@@ -1,10 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, Button, Icon, Popover } from "antd";
+import { Form, Input, Button, Icon, Popover, Card, List, Row, Col } from "antd";
 import { submitMakerAction } from "../actions";
 import '../../App.css'
 
 const { TextArea } = Input;
+
+const data_test = [
+    {
+        title: 'Title 1',
+    },
+    {
+        title: 'Title 2'
+    },
+];
 
 let id = 0;
 
@@ -27,7 +36,7 @@ const formItemLayout = {
 
 const formTailLayout = {
     labelCol: { span: 4 },
-    wrapperCol: { span: 10, offset: 4 },
+    wrapperCol: { span: 10, offset: 3},
 };
 
 class ComponentInterfaceMaker extends Component {
@@ -271,6 +280,24 @@ class ComponentInterfaceMaker extends Component {
 const WrapperInterfaceMaker = Form.create({name: 'Interface_maker'})(ComponentInterfaceMaker);
 const InterfaceForm = connect(mapStateToProps, mapDispatchToProps)(WrapperInterfaceMaker);
 
+// Maker list
+
+class MakerList extends Component {
+    render() {
+        return (
+            <List
+                grid={{gutter: 16, column: 4 }}
+                dataSource={data_test}
+                renderItem={item => (
+                    <List.Item>
+                        <Card title={item.title}>Card Content</Card>
+                    </List.Item>
+                )}
+            />
+        )
+    }
+}
+
 class InterfaceMaker extends Component {
     constructor(props) {
         super(props);
@@ -284,18 +311,57 @@ class InterfaceMaker extends Component {
         if (this.state.showAddMaker) {
             return (
                 <div>
-                    <InterfaceForm/>
-                    <Button onClick={() => {this.setState({showAddMaker: false})}}>
-                        Hide
-                    </Button>
+                    <Row className="center_div">
+                        <Col span={24}>
+                            <InterfaceForm/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={4}>
+                            <h2>Maker list</h2>
+                        </Col>
+                        <Col span={16}/>
+                        <Col span={4}>
+                            <Button type="danger" onClick={() => {this.setState({showAddMaker: false})}}>
+                                <Icon type="close" />
+                                Quit adding
+                            </Button>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={2}/>
+                        <Col span={20}>
+                            <MakerList/>
+                        </Col>
+                        <Col span={2}/>
+                    </Row>
                 </div>
             )
         } else {
             return (
                 <div>
-                    <Button onClick={() => {this.setState({showAddMaker: true})}}>
-                        Add new maker
-                    </Button>
+                    <Row>
+                        <Col span={24}/>
+                    </Row>
+                    <Row>
+                        <Col span={4}>
+                            <h2>Maker list</h2>
+                        </Col>
+                        <Col span={16}/>
+                        <Col span={4}>
+                            <Button type="primary" onClick={() => {this.setState({showAddMaker: true})}}>
+                                <Icon type="plus" />
+                                Add new maker
+                            </Button>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={2}/>
+                        <Col span={20}>
+                            <MakerList/>
+                        </Col>
+                        <Col span={2}/>
+                    </Row>
                 </div>
             )
         }
