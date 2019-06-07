@@ -134,6 +134,7 @@ class CompListActivities extends React.Component {
     this.props.activities.forEach((element, key) => {
       element.key = key;
     });
+    this.props.activities.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
     if (this.props.activities.length > 0) {
       list = (
         <div className="list-activities">
@@ -142,7 +143,7 @@ class CompListActivities extends React.Component {
             dataSource={this.props.activities}
             expandedRowRender={(row) => this.childCreate(row)}
             expandRowByClick={true}
-            pagination={{position: 'none'}}
+            pagination={{position: this.props.activities.length > 10 ? "bottom" : "none"}}
           />
         </div>
       )

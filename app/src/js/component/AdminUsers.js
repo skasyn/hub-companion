@@ -199,7 +199,7 @@ class CompAdminUsers extends React.Component {
             dataSource={this.props.users}
             expandedRowRender={(row, index) => this.childCreate(row, index)}
             expandRowByClick={true}
-            pagination={{position: 'none'}}
+            pagination={{position: this.props.users.length > 10 ? "bottom" : "none"}}
           />
         </div>
       )
