@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Form, Input, Button, Icon, Popover, Card, List, Row, Col} from "antd";
-import { submitMakerAction, fetchMakerUserAction } from "../actions";
+import { submitSharingAction, fetchSharingUserAction } from "../actions";
 import {WallitDrawer, WallitTag} from "./WallitAssets";
 import '../../App.css'
 
@@ -19,7 +19,7 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
     return {
-        submitClick: code => dispatch(submitMakerAction(code))
+        submitClick: code => dispatch(submitSharingAction(code))
     }
 };
 
@@ -33,7 +33,7 @@ const formTailLayout = {
     wrapperCol: { span: 10, offset: 3},
 };
 
-class ComponentInterfaceMaker extends Component {
+class ComponentInterfaceSharing extends Component {
 
     state = {
         checkNick: false,
@@ -118,7 +118,7 @@ class ComponentInterfaceMaker extends Component {
                         title="Project title"
                         content={
                             <div>
-                                <p>Enter the name of your maker project.</p>
+                                <p>Enter the name of your sharing project.</p>
                             </div>
                         }
                         placement="rightTop">
@@ -165,104 +165,7 @@ class ComponentInterfaceMaker extends Component {
                         <Icon type="question"/>
                     </Popover>
                 </Form.Item>
-
-                <Form.Item {...formItemLayout}
-                           label="Functionalities"
-                           style={{textAlign: 'left'}}
-                >
-                    {getFieldDecorator('functionalities', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Please input a list of functionalities'
-                            },
-                        ],
-                    })(<TextArea rows={4} placeholder="Please input a list of functionalities" style={{width: '90%', marginRight: 8}}/>)}
-                    <Popover
-                        title="List of functionalities"
-                        content={
-                            <div>
-                                <p>This list represents what you will produce. It will be used to evaluate your project.</p>
-                            </div>
-                        }
-                        placement="rightTop">
-                        <Icon type="question"/>
-                    </Popover>
-                </Form.Item>
-
-                <Form.Item {...formItemLayout}
-                           label="Technologies"
-                           style={{textAlign: 'left'}}
-                >
-                    {getFieldDecorator('technologies', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Please input your technologies'
-                            },
-                        ],
-                    })(<Input placeholder="Please input your technologies" style={{width: '90%', marginRight: 8}}/>)}
-                    <Popover
-                        title="Technologies used"
-                        content={
-                            <div>
-                                <p>This field speaks for itself.</p>
-                            </div>
-                        }
-                        placement="rightTop">
-                        <Icon type="question"/>
-                    </Popover>
-                </Form.Item>
-
-                <Form.Item {...formItemLayout}
-                           label="Ressources"
-                           style={{textAlign: 'left'}}
-                >
-                    {getFieldDecorator('ressources', {
-                        rules: [
-                            {
-                                required: false,
-                                message: 'Please input a list of ressources'
-                            },
-                        ],
-                    })(<TextArea rows={4} placeholder="Please input a list of ressources" style={{width: '90%', marginRight: 8}}/>)}
-                    <Popover
-                        title="Ressources needed"
-                        content={
-                            <div>
-                                <p>If you need ressources, precise it here.</p>
-                            </div>
-                        }
-                        placement="rightTop">
-                        <Icon type="question"/>
-                    </Popover>
-                </Form.Item>
-
-                <Form.Item {...formItemLayout}
-                           label="Informations"
-                           style={{textAlign: 'left'}}
-                >
-                    {getFieldDecorator('information', {
-                        rules: [
-                            {
-                                required: false,
-                                message: 'Please input a list of ressources'
-                            },
-                        ],
-                    })(<TextArea rows={4} placeholder="Please input informations if needed." style={{width: '90%', marginRight: 8}}/>
-                    )}
-                    <Popover
-                        title="Further informations"
-                        content={
-                            <div>
-                                <p>If you want to give other informations, put it here.</p>
-                            </div>
-                        }
-                        placement="rightTop">
-                        <Icon type="question"/>
-                    </Popover>
-                </Form.Item>
-
+                
                 <Form.Item {...formTailLayout}>
                     <Button type="primary" onClick={this.check} loading={this.props.loading}>
                         Check
@@ -273,26 +176,26 @@ class ComponentInterfaceMaker extends Component {
     }
 }
 
-const WrapperInterfaceMaker = Form.create({name: 'Interface_maker'})(ComponentInterfaceMaker);
-const InterfaceForm = connect(mapStateToProps, mapDispatchToProps)(WrapperInterfaceMaker);
+const WrapperInterfaceSharing = Form.create({name: 'Interface_sharing'})(ComponentInterfaceSharing);
+const InterfaceForm = connect(mapStateToProps, mapDispatchToProps)(WrapperInterfaceSharing);
 
-// Maker list
+// Sharing list
 
-const makerMapStateToProps = state => {
+const sharingMapStateToProps = state => {
     return {
-        makers: state.makers,
-        received_makers: state.received_makers,
+        sharings: state.sharings,
+        received_sharings: state.received_sharings,
         id: state.id
     }
 };
 
-function makerMapDispatchToProps(dispatch) {
+function sharingMapDispatchToProps(dispatch) {
     return {
-        fetchMaker: profile => dispatch(fetchMakerUserAction(profile))
+        fetchSharing: profile => dispatch(fetchSharingUserAction(profile))
     }
 }
 
-class CompMakerList extends Component {
+class CompSharingList extends Component {
 
     state = {
         selected_item: 0,
@@ -309,51 +212,51 @@ class CompMakerList extends Component {
     };
 
     render() {
-        if (this.props.received_makers === false) {
-            this.props.fetchMaker(this.props.id);
+        if (this.props.received_sharings === false) {
+            this.props.fetchSharing(this.props.id);
         }
 
         return (
             <div>
                 <List
                     grid={{gutter: 16, column: 3 }}
-                    dataSource={this.props.makers}
+                    dataSource={this.props.sharings}
                     renderItem={item => (
                         <List.Item>
                             <Card headStyle={{fontWeight: "bold", textAlign: 'left'}} title={item.title} extra={<Button value={item._id} onClick={this.showDrawer}>More</Button>}>
-                                    <WallitTag status={item.status}/>
+                                <WallitTag status={item.status}/>
                             </Card>
                         </List.Item>
                     )}
                 />
-                <WallitDrawer items={this.props.makers} selected_item={this.state.selected_item} drawer_visible={this.state.drawer_visible} hideDrawer={this.hideDrawer}/>
+                <WallitDrawer items={this.props.sharings} selected_item={this.state.selected_item} drawer_visible={this.state.drawer_visible} hideDrawer={this.hideDrawer}/>
             </div>
         )
     }
 }
 
-const MakerList = connect(makerMapStateToProps, makerMapDispatchToProps)(CompMakerList);
+const SharingList = connect(sharingMapStateToProps, sharingMapDispatchToProps)(CompSharingList);
 
-// Interface Maker
-class InterfaceMaker extends Component {
+// Interface Sharing
+class InterfaceSharing extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            showAddMaker: false
+            showAddSharing: false
         };
     }
 
     hideForm = () => {
-        this.setState({showAddMaker: false});
+        this.setState({showAddSharing: false});
     };
 
     showForm = () => {
-        this.setState({showAddMaker: true});
+        this.setState({showAddSharing: true});
     };
 
     render() {
-        if (this.state.showAddMaker) {
+        if (this.state.showAddSharing) {
             return (
                 <div>
                     <Row className="center_div">
@@ -363,7 +266,7 @@ class InterfaceMaker extends Component {
                     </Row>
                     <Row>
                         <Col span={6} >
-                            <h2 style={{marginLeft: 2}}>Maker list</h2>
+                            <h2 style={{marginLeft: 2}}>Sharing list</h2>
                         </Col>
                         <Col span={14}/>
                         <Col span={4}>
@@ -376,7 +279,7 @@ class InterfaceMaker extends Component {
                     <Row>
                         <Col span={2}/>
                         <Col span={20}>
-                            <MakerList/>
+                            <SharingList/>
                         </Col>
                         <Col span={2}/>
                     </Row>
@@ -390,20 +293,20 @@ class InterfaceMaker extends Component {
                     </Row>
                     <Row>
                         <Col span={6}>
-                            <h2 style={{marginLeft: 2}}>Maker list</h2>
+                            <h2 style={{marginLeft: 2}}>Sharing list</h2>
                         </Col>
                         <Col span={14}/>
                         <Col span={4}>
                             <Button type="primary" onClick={this.showForm}>
                                 <Icon type="plus" />
-                                Add new maker
+                                Add new sharing
                             </Button>
                         </Col>
                     </Row>
                     <Row>
                         <Col span={2}/>
                         <Col span={20}>
-                            <MakerList/>
+                            <SharingList/>
                         </Col>
                         <Col span={2}/>
                     </Row>
@@ -413,4 +316,4 @@ class InterfaceMaker extends Component {
     }
 }
 
-export default InterfaceMaker
+export default InterfaceSharing

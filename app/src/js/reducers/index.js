@@ -12,7 +12,9 @@ import {
   CHANGE_YEAR,
   ADMIN_INFOS,
   SUBMIT_MAKER,
-  MAKER_USER
+  MAKER_USER,
+  SUBMIT_SHARING,
+  SHARING_USER,
 } from "../actions/index";
 
 const initialState = {
@@ -23,6 +25,7 @@ const initialState = {
   activities : [],
   received_activities: false,
   received_makers: false,
+  received_sharings: false,
   points: {
     acculturation: 0,
     experimentation: 0,
@@ -95,6 +98,7 @@ function rootReducer(state = initialState, action) {
       return Object.assign({}, state, {
         received_activities: true,
         makers: action.payload.data.makers,
+        sharings: action.payload.data.sharings,
         users: action.payload.data.users
       })
 
@@ -102,7 +106,13 @@ function rootReducer(state = initialState, action) {
       return Object.assign({}, state, {
         received_makers: true,
         makers: action.payload.data.makers,
-      })
+      });
+
+    case SHARING_USER:
+      return Object.assign({}, state, {
+        received_sharings: true,
+        sharings: action.payload.data.sharings,
+      });
 
     case CONTENT_CHANGE:
       return Object.assign({}, state, {
@@ -124,7 +134,14 @@ function rootReducer(state = initialState, action) {
         error: action.payload.error,
         loading: action.payload.loading,
         received_makers: false,
-      })
+      });
+
+    case SUBMIT_SHARING:
+      return Object.assign({}, state, {
+        error: action.payload.error,
+        loading: action.payload.loading,
+        received_sharings: false,
+      });
 
     default:
     break;

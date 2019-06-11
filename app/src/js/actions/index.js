@@ -7,9 +7,11 @@ export const DISCONNECT = 'DISCONNECT'
 export const REFRESH = 'REFRESH';
 export const CONTENT_CHANGE = 'CONTENT_CHANGE';
 export const SUBMIT_MAKER = 'SUBMIT_MAKER';
+export const SUBMIT_SHARING = 'SUBMIT_SHARING';
 export const CHANGE_PLAN = 'CHANGE_PLAN';
 export const CHANGE_YEAR = 'CHANGE_YEAR';
 export const MAKER_USER = 'MAKER_USER';
+export const SHARING_USER = 'SHARING_USER';
 
 export function login(payload) {
   return function(dispatch) {
@@ -123,6 +125,27 @@ export function fetchAdminInfos(payload) {
   } 
 }
 
+export function submitSharingAction(payload) {
+  return function (dispatch) {
+    fetch(`api/submitSharing`, {
+      accept: 'application/json',
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    })
+        .then((response) => response.json())
+        .then((data) => {
+          dispatch({
+            type: SUBMIT_SHARING,
+            payload: {
+              error: data.error,
+              loading: false,
+            }
+          })
+        });
+  }
+}
+
 export function submitMakerAction(payload) {
   return function (dispatch) {
     fetch(`api/submitMaker`, {
@@ -222,6 +245,28 @@ export function fetchMakerUserAction(payload) {
         .then((data) => {
           dispatch({
             type: MAKER_USER,
+            payload: {
+              data: data
+            }
+          })
+        })
+  }
+}
+
+export function fetchSharingUserAction(payload) {
+  return function(dispatch) {
+    fetch(`api/fetch_sharing_user`, {
+      accept: "application/json",
+      method: "post",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        "id": payload
+      })
+    })
+        .then(response => response.json())
+        .then((data) => {
+          dispatch({
+            type: SHARING_USER,
             payload: {
               data: data
             }

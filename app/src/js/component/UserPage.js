@@ -12,6 +12,7 @@ import { fetchInfos, changeContent } from "../actions/index";
 import '../../App.css';
 import Settings from "./Settings";
 import InterfaceMaker from "./InterfaceMaker";
+import InterfaceSharing from "./InterfaceSharing";
 
 const Contents = {
     DASHBOARD: 1,
@@ -80,7 +81,7 @@ class CompMiddleContent extends React.Component {
             case Contents.SHARING:
                 return (
                     <div>
-
+                        <InterfaceSharing />
                     </div>
                 )
             case Contents.SETTINGS:

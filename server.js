@@ -86,11 +86,22 @@ const MakerSchema = mongoose.Schema({
   status: Number,
 });
 
+const SharingSchema = mongoose.Schema({
+  title: String,
+  leader_email: String,
+  co_workers: [String],
+  description: String,
+  date: String,
+  status: Number,
+})
+
 const Activity = mongoose.model('activity', ActivitySchema);
 
 const User = mongoose.model('user', UserSchema);
 
-const Maker = mongoose.model('maker', MakerSchema)
+const Maker = mongoose.model('maker', MakerSchema);
+
+const Sharing = mongoose.model('sharing', SharingSchema);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
@@ -188,6 +199,30 @@ function makerUpsert(newMaker) {
   return false
 }
 
+function sharingUpsert(newSharing) {
+  if (newSharing._id === undefined) {
+    Sharing.create(
+        {
+          title: newSharing.title,
+          leader_email: newSharing.email,
+          co_workers: newSharing.coworker_email,
+          description: newSharing.description,
+          status: 0,
+        }, (err) => {
+          return err
+        }
+    )
+  } else {
+    Sharing.updateOne({
+          _id: newSharing._id
+        }, newSharing, {upsert: true},
+        (err) => {
+          return err
+        })
+  }
+  return false
+}
+
 function makerUpdatePoints(newMaker) {
   let array = newMaker.co_workers
   array.push(newMaker.leader_email)
@@ -202,6 +237,22 @@ function makerUpdatePoints(newMaker) {
         User.updateMany({mail: array[user]}, {$inc: {fruition: point_change}}, (err) => err)
       }
     })
+}
+
+function sharingUpdatePoints(newSharing) {
+  let array = newSharing.co_workers
+  array.push(newSharing.leader_email)
+  array = array.filter((value, index, self) => self.indexOf(value) === index)
+  Sharing.findById(newSharing._id, (err, oldSharing) => {
+    let point_change = 0;
+    if (newSharing.status === 1 && oldSharing.status !== 1)
+      point_change = 1
+    if (newSharing.status !== 1 && oldSharing.status === 1)
+      point_change = -1
+    for (user in array) {
+      User.updateMany({mail: array[user]}, {$inc: {sharing: point_change}}, (err) => err)
+    }
+  })
 }
 
 function retrieveEvents(year, hubModule, city, event, activity) {
@@ -306,6 +357,7 @@ app.post("/api/infos", (req, resPost) => {
 app.post("/api/admininfos", (req, resPost) => {
   let user = {};
   let makers = [];
+  let sharings = [];
   let users = [];
 
   return User.findOne({id: req.body.id}, (err, res) => user = res)
@@ -315,13 +367,16 @@ app.post("/api/admininfos", (req, resPost) => {
     else {
       Maker.find({}, (err, res) => makers = res)
       .then(() => {
-        console.log("here");
-        User.find({}).select("id mail name plan year acculturation experimentation fruition sharing privilege")
-        .exec((err, res) => {
-          users = res;
-          resPost.json({makers: makers, users: users})
-        })
-      })
+        Sharing.find({}, (err, res) => sharings = res)
+            .then(() => {
+            console.log("here");
+            User.find({}).select("id mail name plan year acculturation experimentation fruition sharing privilege")
+            .exec((err, res) => {
+              users = res;
+              resPost.json({makers: makers, users: users, sharings: sharings})
+            })
+          })
+    })
     }
   }).catch(function(err) {
   })
@@ -336,6 +391,20 @@ app.post("/api/fetch_maker_user", (req, resPost) => {
         Maker.find({$or: [{leader_email: user.mail}, {co_workers: user.mail}]}, (err, res) => makers = res)
             .then (() => {
               resPost.json({makers: makers})
+            })
+      }).catch(function (err) {
+      })
+});
+
+app.post("/api/fetch_sharing_user", (req, resPost) => {
+  let user = {};
+  let sharings = [];
+
+  return User.findOne({id: req.body.id}, (err, res) => user = res)
+      .then(() => {
+        Sharing.find({$or: [{leader_email: user.mail}, {co_workers: user.mail}]}, (err, res) => sharings = res)
+            .then (() => {
+              resPost.json({sharings: sharings})
             })
       }).catch(function (err) {
       })
@@ -359,10 +428,20 @@ app.post("/api/logincookie", (req, resPost) => {
 })
 
 app.post('/api/submitMaker', (req, res) => {
-  makerUpdatePoints(req.body);
+  if (req.body._id !== undefined)
+    makerUpdatePoints(req.body);
   let result = makerUpsert(req.body);
   return res.json({
       error: result
+  })
+});
+
+app.post('/api/submitSharing', (req, res) => {
+  if (req.body._id !== undefined)
+    sharingUpdatePoints(req.body);
+  let result = sharingUpsert(req.body);
+  return res.json({
+    error: result
   })
 });
 

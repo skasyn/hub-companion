@@ -81,8 +81,11 @@ const pStyle = {
     marginBottom: 16,
 };
 
-const default_maker = {
-    title: 'DEFAULT_MAKER',
+const default_item = {
+    title: 'DEFAULT_ITEM',
+    leader_email: 'wallit@wanadoo.fr',
+    co_workers: ['untruc@caramail.fr'],
+    description: 'An error by Wallit studio'
 };
 
 const DescriptionItem = ({ title, content }) => (
@@ -111,13 +114,13 @@ export class WallitDrawer extends Component {
 
     findMakerById = id => {
         if (id === 0) {
-            return this.props.makers[0]
+            return this.props.items[0]
         }
-        return this.props.makers.find((elem) => elem._id === id);
+        return this.props.items.find((elem) => elem._id === id);
     };
 
     render() {
-        let maker = (this.props.selected_maker ? this.findMakerById(this.props.selected_maker) : default_maker);
+        let item = (this.props.selected_item ? this.findMakerById(this.props.selected_item) : default_item);
 
         return (
             <Drawer
@@ -127,50 +130,54 @@ export class WallitDrawer extends Component {
                 onClose={this.props.hideDrawer}
                 visible={this.props.drawer_visible}
             >
-                <p style={{...pStyle, marginBottom: 24 }}>
+                <div style={{...pStyle, marginBottom: 24 }}>
                     <Row>
                         <Col span={20}>
-                            {maker.title}
+                            {item.title}
                         </Col>
                         <Col span={4}>
-                            <WallitTag status={maker.status} />
+                            <WallitTag status={item.status} />
                         </Col>
                     </Row>
-                </p>
+                </div>
                 <p style={pStyle}>Team</p>
                 <Row>
-                    <DescriptionItem title="Leader" content={maker.leader_email}/>
+                    <DescriptionItem title="Leader" content={item.leader_email}/>
                 </Row>
-                {maker.co_workers !== undefined &&
+                {item.co_workers !== undefined &&
                 <Row>
-                    {maker.co_workers.map((item, index) => {
-                        return (<DescriptionItem title={"Coworker " + (index + 1)} content={item}/>)
+                    {item.co_workers.map((item, index) => {
+                        return (<DescriptionItem key={index} title={"Coworker " + (index + 1)} content={item}/>)
                     })}
                 </Row>
                 }
                 <Divider />
                 <p style={pStyle}>Project information</p>
                 <Row>
-                    <DescriptionItem title="Description" content={maker.description}/>
+                    <DescriptionItem title="Description" content={item.description}/>
                 </Row>
-                <Row>
-                    <DescriptionItem title="Functionalities" content={maker.functionalities}/>
-                </Row>
-                <Row>
-                    <DescriptionItem title="Technologies" content={maker.technologies}/>
-                </Row>
-                {(maker.ressources !== undefined || maker.informations !== undefined) &&
+                {item.functionalities !== undefined &&
+                    <Row>
+                        <DescriptionItem title="Functionalities" content={item.functionalities}/>
+                    </Row>
+                }
+                {item.technologies !== undefined &&
+                    <Row>
+                        <DescriptionItem title="Technologies" content={item.technologies}/>
+                    </Row>
+                }
+                {(item.ressources !== undefined || item.informations !== undefined) &&
                     <div>
                         < Divider />
                         <p style={pStyle}>Additionnal information</p>
-                        {maker.ressources !== undefined &&
+                        {item.ressources !== undefined &&
                             <Row>
-                                <DescriptionItem title="Ressources" content={maker.ressources}/>
+                                <DescriptionItem title="Ressources" content={item.ressources}/>
                             </Row>
                         }
-                        {maker.informations !== undefined &&
+                        {item.informations !== undefined &&
                             <Row>
-                                <DescriptionItem title="More information" content={maker.informations}/>
+                                <DescriptionItem title="More information" content={item.informations}/>
                             </Row>
                         }
                     </div>

@@ -11,6 +11,7 @@ import { fetchAdminInfos } from "../actions/index";
 import { changeContent } from '../actions/index';
 import AdminMaker from "./AdminMakers";
 import AdminUsers from "./AdminUsers";
+import AdminSharing from "./AdminSharings";
 
 const Contents = {
     MENU: 1,
@@ -65,6 +66,7 @@ class CompMiddleContent extends React.Component {
             case Contents.SHARING:
                 return (
                     <div>
+                        <AdminSharing />
                     </div>
                 )
             case Contents.SETTINGS:
