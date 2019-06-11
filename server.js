@@ -369,7 +369,6 @@ app.post("/api/admininfos", (req, resPost) => {
       .then(() => {
         Sharing.find({}, (err, res) => sharings = res)
             .then(() => {
-            console.log("here");
             User.find({}).select("id mail name plan year acculturation experimentation fruition sharing privilege")
             .exec((err, res) => {
               users = res;
