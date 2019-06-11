@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Badge, Button, Select, Tag} from 'antd/lib/index'
+import {Badge, Button, Tag, Drawer, Row, Divider, Col} from 'antd/lib/index'
 
 export class LoadingButton extends Component {
 
@@ -71,4 +71,111 @@ export class WallitTag extends Component {
                             {message.toUpperCase()}
                         </Tag>
                 )}   }
+}
+
+const pStyle = {
+    fontSize: 16,
+    color: 'rgba(0,0,0,0.85)',
+    lineHeight: '24px',
+    display: 'block',
+    marginBottom: 16,
+};
+
+const default_maker = {
+    title: 'DEFAULT_MAKER',
+};
+
+const DescriptionItem = ({ title, content }) => (
+    <div
+        style={{
+            fontSize: 14,
+            lineHeight: '22px',
+            marginBottom: 7,
+            color: 'rgba(0,0,0,0.65)',
+        }}
+    >
+        <p
+            style={{
+                marginRight: 8,
+                display: 'inline-block',
+                color: 'rgba(0,0,0,0.85)',
+            }}
+        >
+            {title}:
+        </p>
+        {content}
+    </div>
+);
+
+export class WallitDrawer extends Component {
+
+    findMakerById = id => {
+        if (id === 0) {
+            return this.props.makers[0]
+        }
+        return this.props.makers.find((elem) => elem._id === id);
+    };
+
+    render() {
+        let maker = (this.props.selected_maker ? this.findMakerById(this.props.selected_maker) : default_maker);
+
+        return (
+            <Drawer
+                width={640}
+                placement="right"
+                closable={false}
+                onClose={this.props.hideDrawer}
+                visible={this.props.drawer_visible}
+            >
+                <p style={{...pStyle, marginBottom: 24 }}>
+                    <Row>
+                        <Col span={20}>
+                            {maker.title}
+                        </Col>
+                        <Col span={4}>
+                            <WallitTag status={maker.status} />
+                        </Col>
+                    </Row>
+                </p>
+                <p style={pStyle}>Team</p>
+                <Row>
+                    <DescriptionItem title="Leader" content={maker.leader_email}/>
+                </Row>
+                {maker.co_workers !== undefined &&
+                <Row>
+                    {maker.co_workers.map((item, index) => {
+                        return (<DescriptionItem title={"Coworker " + (index + 1)} content={item}/>)
+                    })}
+                </Row>
+                }
+                <Divider />
+                <p style={pStyle}>Project information</p>
+                <Row>
+                    <DescriptionItem title="Description" content={maker.description}/>
+                </Row>
+                <Row>
+                    <DescriptionItem title="Functionalities" content={maker.functionalities}/>
+                </Row>
+                <Row>
+                    <DescriptionItem title="Technologies" content={maker.technologies}/>
+                </Row>
+                {(maker.ressources !== undefined || maker.informations !== undefined) &&
+                    <div>
+                        < Divider />
+                        <p style={pStyle}>Additionnal information</p>
+                        {maker.ressources !== undefined &&
+                            <Row>
+                                <DescriptionItem title="Ressources" content={maker.ressources}/>
+                            </Row>
+                        }
+                        {maker.informations !== undefined &&
+                            <Row>
+                                <DescriptionItem title="More information" content={maker.informations}/>
+                            </Row>
+                        }
+                    </div>
+                }
+            </Drawer>
+        )
+    }
 }

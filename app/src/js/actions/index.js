@@ -221,7 +221,6 @@ export function fetchMakerUserAction(payload) {
     })
         .then(response => response.json())
         .then((data) => {
-          console.log(data);
           dispatch({
             type: MAKER_USER,
             payload: {

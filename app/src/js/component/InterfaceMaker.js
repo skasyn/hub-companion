@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, Button, Icon, Popover, Card, List, Row, Col, Drawer, Divider } from "antd";
+import { Form, Input, Button, Icon, Popover, Card, List, Row, Col} from "antd";
 import { submitMakerAction, fetchMakerUserAction } from "../actions";
-import { WallitTag } from "./WallitAssets";
+import {WallitDrawer, WallitTag} from "./WallitAssets";
 import '../../App.css'
 
 const { TextArea } = Input;
@@ -292,26 +292,20 @@ function makerMapDispatchToProps(dispatch) {
     }
 }
 
-const pStyle = {
-    fontSize: 16,
-    color: 'rgba(0,0,0,0.85)',
-    lineHeight: '24px',
-    display: 'block',
-    marginBottom: 16,
-};
-
 class CompMakerList extends Component {
 
-    showDrawer = () => {
-        this.setState({
-            visible: true,
-        });
+    state = {
+        selected_item: 0,
+        drawer_visible: false,
     };
 
-    hideDrawer = () => {
+    hideDrawer = () => this.setState({ drawer_visible: false });
+
+    showDrawer = item => {
         this.setState({
-            visible: false,
-        });
+            selected_item: item.currentTarget.value,
+            drawer_visible: true,
+        })
     };
 
     render() {
@@ -322,16 +316,17 @@ class CompMakerList extends Component {
         return (
             <div>
                 <List
-                    grid={{gutter: 16, column: 2 }}
+                    grid={{gutter: 16, column: 3 }}
                     dataSource={this.props.makers}
                     renderItem={item => (
                         <List.Item>
-                            <Card title={item.title} extra={<Button>More</Button>}>
+                            <Card headStyle={{fontWeight: "bold", textAlign: 'left'}} title={item.title} extra={<Button value={item._id} onClick={this.showDrawer}>More</Button>}>
                                     <WallitTag status={item.status}/>
                             </Card>
                         </List.Item>
                     )}
                 />
+                <WallitDrawer makers={this.props.makers} selected_maker={this.state.selected_item} drawer_visible={this.state.drawer_visible} hideDrawer={this.hideDrawer}/>
             </div>
         )
     }
