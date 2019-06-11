@@ -315,7 +315,6 @@ app.post("/api/admininfos", (req, resPost) => {
     else {
       Maker.find({}, (err, res) => makers = res)
       .then(() => {
-        console.log("here");
         User.find({}).select("id mail name plan year acculturation experimentation fruition sharing privilege")
         .exec((err, res) => {
           users = res;
