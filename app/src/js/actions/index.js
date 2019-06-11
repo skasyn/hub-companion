@@ -209,7 +209,6 @@ export function choseYear(payload) {
 }
 
 export function fetchMakerUserAction(payload) {
-  //console.log(payload)
   return function(dispatch) {
     fetch(`api/fetch_maker_user`, {
       accept: "application/json",

@@ -180,23 +180,28 @@ function makerUpsert(newMaker) {
   } else {
     Maker.updateOne({
       _id: newMaker._id
-    }, {
-      title: newMaker.title,
-      leader_email: newMaker.email,
-      co_workers: newMaker.coworker_email,
-      description: newMaker.description,
-      functionalities: newMaker.functionalities,
-      technologies: newMaker.technologies,
-      ressources: newMaker.ressources,
-      informations: newMaker.information,
-      status: newMaker.status,
-    },
-        {upsert: true}),
+    }, newMaker, {upsert: true},
         (err) => {
           return err
-        }
+        })
   }
   return false
+}
+
+function makerUpdatePoints(newMaker) {
+  let array = newMaker.co_workers
+  array.push(newMaker.leader_email)
+  array = array.filter((value, index, self) => self.indexOf(value) === index)
+  Maker.findById(newMaker._id, (err, oldMaker) => {
+      let point_change = 0;
+      if (newMaker.status === 1 && oldMaker.status !== 1)
+        point_change = 1
+      if (newMaker.status !== 1 && oldMaker.status === 1)
+        point_change = -1
+      for (user in array) {
+        User.updateMany({mail: array[user]}, {$inc: {fruition: point_change}}, (err) => err)
+      }
+    })
 }
 
 function retrieveEvents(year, hubModule, city, event, activity) {
@@ -328,7 +333,6 @@ app.post("/api/fetch_maker_user", (req, resPost) => {
 
   return User.findOne({id: req.body.id}, (err, res) => user = res)
       .then(() => {
-        //Maker.find({leader_email: user.mail}, (err, res) => makers_leader = res)
         Maker.find({$or: [{leader_email: user.mail}, {co_workers: user.mail}]}, (err, res) => makers = res)
             .then (() => {
               resPost.json({makers: makers})
@@ -355,9 +359,10 @@ app.post("/api/logincookie", (req, resPost) => {
 })
 
 app.post('/api/submitMaker', (req, res) => {
+  makerUpdatePoints(req.body);
   let result = makerUpsert(req.body);
   return res.json({
-    error: result
+      error: result
   })
 });
 
