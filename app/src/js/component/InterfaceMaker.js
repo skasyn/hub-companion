@@ -332,16 +332,6 @@ class CompMakerList extends Component {
                         </List.Item>
                     )}
                 />
-                <Drawer
-                    width={640}
-                    placement="right"
-                    closable={false}
-                    onClose={this.hideDrawer}
-                    visible={this.state.visible}
-                >
-                    <p style={{...pStyle, marginBottom: 24 }}>Maker profile</p>
-                    <p style={pStyle}>Personal</p>
-                </Drawer>
             </div>
         )
     }
