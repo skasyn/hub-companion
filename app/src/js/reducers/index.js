@@ -1,6 +1,19 @@
 import cookie from 'react-cookie';
 
-import { LOGIN_OFFICE, LOGIN_COOKIE, LOGIN_FINISHED, FETCH_INFOS, DISCONNECT, REFRESH, CONTENT_CHANGE, CHANGE_PLAN, CHANGE_YEAR, ADMIN_INFOS } from "../actions/index";
+import {
+  LOGIN_OFFICE,
+  LOGIN_COOKIE,
+  LOGIN_FINISHED,
+  FETCH_INFOS,
+  DISCONNECT,
+  REFRESH,
+  CONTENT_CHANGE,
+  CHANGE_PLAN,
+  CHANGE_YEAR,
+  ADMIN_INFOS,
+  SUBMIT_MAKER,
+  MAKER_USER
+} from "../actions/index";
 
 const initialState = {
   is_connected: false,
@@ -9,6 +22,7 @@ const initialState = {
   id: '',
   activities : [],
   received_activities: false,
+  received_makers: false,
   points: {
     acculturation: 0,
     experimentation: 0,
@@ -84,6 +98,12 @@ function rootReducer(state = initialState, action) {
         users: action.payload.data.users
       })
 
+    case MAKER_USER:
+      return Object.assign({}, state, {
+        received_makers: true,
+        makers: action.payload.data.makers,
+      })
+
     case CONTENT_CHANGE:
       return Object.assign({}, state, {
         content: action.payload
@@ -97,6 +117,13 @@ function rootReducer(state = initialState, action) {
     case CHANGE_YEAR:
       return Object.assign({}, state, {
         year: action.payload.year
+      })
+
+    case SUBMIT_MAKER:
+      return Object.assign({}, state, {
+        error: action.payload.error,
+        loading: action.payload.loading,
+        received_makers: false,
       })
 
     default:

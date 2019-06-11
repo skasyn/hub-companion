@@ -11,7 +11,7 @@ const mapStateToProps = state => {
   return {
     makers: state.makers
   }
-}
+};
 
 function MapDispatchToProps(dispatch) {
   return {

@@ -160,7 +160,7 @@ function activityUpsert(event, activity, studentList, hubModule) {
   });
 }
 
-function makerUpsert(newMaker, response) {
+function makerUpsert(newMaker) {
   if (newMaker._id === undefined) {
     Maker.create(
         {
@@ -173,9 +173,8 @@ function makerUpsert(newMaker, response) {
           ressources: newMaker.ressources,
           informations: newMaker.information,
           status: 0,
-        },
-        (err, res) => {
-          response.json({})
+        }, (err) => {
+          return err
         }
     )
   } else {
@@ -191,11 +190,13 @@ function makerUpsert(newMaker, response) {
       ressources: newMaker.ressources,
       informations: newMaker.information,
       status: newMaker.status,
-    }, {upsert: true},
-        (err, res) => {
-      response.json({})
-    })
+    },
+        {upsert: true}),
+        (err) => {
+          return err
+        }
   }
+  return false
 }
 
 function retrieveEvents(year, hubModule, city, event, activity) {
@@ -319,7 +320,22 @@ app.post("/api/admininfos", (req, resPost) => {
     }
   }).catch(function(err) {
   })
-})
+});
+
+app.post("/api/fetch_maker_user", (req, resPost) => {
+  let user = {};
+  let makers = [];
+
+  return User.findOne({id: req.body.id}, (err, res) => user = res)
+      .then(() => {
+        //Maker.find({leader_email: user.mail}, (err, res) => makers_leader = res)
+        Maker.find({$or: [{leader_email: user.mail}, {co_workers: user.mail}]}, (err, res) => makers = res)
+            .then (() => {
+              resPost.json({makers: makers})
+            })
+      }).catch(function (err) {
+      })
+});
 
 app.post("/api/logincookie", (req, resPost) => {
   return User.findOne({id: req.body.id},
@@ -339,7 +355,10 @@ app.post("/api/logincookie", (req, resPost) => {
 })
 
 app.post('/api/submitMaker', (req, res) => {
-  return makerUpsert(req.body, res)
+  let result = makerUpsert(req.body);
+  return res.json({
+    error: result
+  })
 });
 
 app.post('/api/changeplan', (req, resPost) => {

@@ -1,31 +1,25 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Form, Input, Button, Icon, Popover, Card, List, Row, Col } from "antd";
-import { submitMakerAction } from "../actions";
+import { Form, Input, Button, Icon, Popover, Card, List, Row, Col, Drawer, Divider } from "antd";
+import { submitMakerAction, fetchMakerUserAction } from "../actions";
+import { WallitTag } from "./WallitAssets";
 import '../../App.css'
 
 const { TextArea } = Input;
-
-const data_test = [
-    {
-        title: 'Title 1',
-    },
-    {
-        title: 'Title 2'
-    },
-];
 
 let id = 0;
 
 const mapStateToProps = state => {
     return {
-        email: state.mail
+        email: state.mail,
+        loading: state.loading,
+        error: state.error,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        submitClick: code => dispatch( submitMakerAction(code))
+        submitClick: code => dispatch(submitMakerAction(code))
     }
 };
 
@@ -64,11 +58,13 @@ class ComponentInterfaceMaker extends Component {
     };
 
     check = () => {
+        this.setState({loading: true});
         this.props.form.validateFields(err => {
             let results = this.props.form.getFieldsValue();
             results.email = this.props.email;
             if (!err) {
                 this.props.submitClick(results)
+                this.props.onUpdate();
             }
         });
     };
@@ -268,7 +264,7 @@ class ComponentInterfaceMaker extends Component {
                 </Form.Item>
 
                 <Form.Item {...formTailLayout}>
-                    <Button type="primary" onClick={this.check}>
+                    <Button type="primary" onClick={this.check} loading={this.props.loading}>
                         Check
                     </Button>
                 </Form.Item>
@@ -282,22 +278,78 @@ const InterfaceForm = connect(mapStateToProps, mapDispatchToProps)(WrapperInterf
 
 // Maker list
 
-class MakerList extends Component {
+const makerMapStateToProps = state => {
+    return {
+        makers: state.makers,
+        received_makers: state.received_makers,
+        id: state.id
+    }
+};
+
+function makerMapDispatchToProps(dispatch) {
+    return {
+        fetchMaker: profile => dispatch(fetchMakerUserAction(profile))
+    }
+}
+
+const pStyle = {
+    fontSize: 16,
+    color: 'rgba(0,0,0,0.85)',
+    lineHeight: '24px',
+    display: 'block',
+    marginBottom: 16,
+};
+
+class CompMakerList extends Component {
+
+    showDrawer = () => {
+        this.setState({
+            visible: true,
+        });
+    };
+
+    hideDrawer = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+
     render() {
+        if (this.props.received_makers === false) {
+            this.props.fetchMaker(this.props.id);
+        }
+
         return (
-            <List
-                grid={{gutter: 16, column: 4 }}
-                dataSource={data_test}
-                renderItem={item => (
-                    <List.Item>
-                        <Card title={item.title}>Card Content</Card>
-                    </List.Item>
-                )}
-            />
+            <div>
+                <List
+                    grid={{gutter: 16, column: 2 }}
+                    dataSource={this.props.makers}
+                    renderItem={item => (
+                        <List.Item>
+                            <Card title={item.title} extra={<Button>More</Button>}>
+                                    <WallitTag status={item.status}/>
+                            </Card>
+                        </List.Item>
+                    )}
+                />
+                <Drawer
+                    width={640}
+                    placement="right"
+                    closable={false}
+                    onClose={this.hideDrawer}
+                    visible={this.state.visible}
+                >
+                    <p style={{...pStyle, marginBottom: 24 }}>Maker profile</p>
+                    <p style={pStyle}>Personal</p>
+                </Drawer>
+            </div>
         )
     }
 }
 
+const MakerList = connect(makerMapStateToProps, makerMapDispatchToProps)(CompMakerList);
+
+// Interface Maker
 class InterfaceMaker extends Component {
     constructor(props) {
         super(props);
@@ -307,22 +359,30 @@ class InterfaceMaker extends Component {
         };
     }
 
+    hideForm = () => {
+        this.setState({showAddMaker: false});
+    };
+
+    showForm = () => {
+        this.setState({showAddMaker: true});
+    };
+
     render() {
         if (this.state.showAddMaker) {
             return (
                 <div>
                     <Row className="center_div">
                         <Col span={24}>
-                            <InterfaceForm/>
+                            <InterfaceForm onUpdate={this.hideForm}/>
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={4}>
-                            <h2>Maker list</h2>
+                        <Col span={6} >
+                            <h2 style={{marginLeft: 2}}>Maker list</h2>
                         </Col>
-                        <Col span={16}/>
+                        <Col span={14}/>
                         <Col span={4}>
-                            <Button type="danger" onClick={() => {this.setState({showAddMaker: false})}}>
+                            <Button type="danger" onClick={this.hideForm}>
                                 <Icon type="close" />
                                 Quit adding
                             </Button>
@@ -344,12 +404,12 @@ class InterfaceMaker extends Component {
                         <Col span={24}/>
                     </Row>
                     <Row>
-                        <Col span={4}>
-                            <h2>Maker list</h2>
+                        <Col span={6}>
+                            <h2 style={{marginLeft: 2}}>Maker list</h2>
                         </Col>
-                        <Col span={16}/>
+                        <Col span={14}/>
                         <Col span={4}>
-                            <Button type="primary" onClick={() => {this.setState({showAddMaker: true})}}>
+                            <Button type="primary" onClick={this.showForm}>
                                 <Icon type="plus" />
                                 Add new maker
                             </Button>

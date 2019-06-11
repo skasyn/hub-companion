@@ -9,6 +9,7 @@ export const CONTENT_CHANGE = 'CONTENT_CHANGE';
 export const SUBMIT_MAKER = 'SUBMIT_MAKER';
 export const CHANGE_PLAN = 'CHANGE_PLAN';
 export const CHANGE_YEAR = 'CHANGE_YEAR';
+export const MAKER_USER = 'MAKER_USER';
 
 export function login(payload) {
   return function(dispatch) {
@@ -129,8 +130,16 @@ export function submitMakerAction(payload) {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(payload)
-    }).then(() => {
-      dispatch({ type: SUBMIT_MAKER} )
+    })
+        .then((response) => response.json())
+        .then((data) => {
+          dispatch({
+            type: SUBMIT_MAKER,
+            payload: {
+              error: data.error,
+              loading: false,
+            }
+          })
     });
   }
 }
@@ -196,5 +205,29 @@ export function choseYear(payload) {
         }
       })
     })
+  }
+}
+
+export function fetchMakerUserAction(payload) {
+  //console.log(payload)
+  return function(dispatch) {
+    fetch(`api/fetch_maker_user`, {
+      accept: "application/json",
+      method: "post",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        "id": payload
+      })
+    })
+        .then(response => response.json())
+        .then((data) => {
+          console.log(data);
+          dispatch({
+            type: MAKER_USER,
+            payload: {
+              data: data
+            }
+          })
+        })
   }
 }
