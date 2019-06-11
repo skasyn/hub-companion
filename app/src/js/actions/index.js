@@ -209,7 +209,6 @@ export function choseYear(payload) {
 }
 
 export function fetchMakerUserAction(payload) {
-  //console.log(payload)
   return function(dispatch) {
     fetch(`api/fetch_maker_user`, {
       accept: "application/json",
@@ -221,7 +220,6 @@ export function fetchMakerUserAction(payload) {
     })
         .then(response => response.json())
         .then((data) => {
-          console.log(data);
           dispatch({
             type: MAKER_USER,
             payload: {

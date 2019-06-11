@@ -175,7 +175,7 @@ class CompAdminMaker extends React.Component {
 
   descriptionMultiline(description)
   {
-    if (description !== null) {
+    if (description !== null && description !== undefined) {
       return (
         <span className="bold-text">
           {description.split("\n").map(function(item, key) {

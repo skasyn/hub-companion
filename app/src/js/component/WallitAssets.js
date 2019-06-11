@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Badge, Button, Select, Tag} from 'antd/lib/index'
+import {Badge, Button, Tag} from 'antd/lib/index'
 
 export class LoadingButton extends Component {
 

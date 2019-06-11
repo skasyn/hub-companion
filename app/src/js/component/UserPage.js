@@ -8,9 +8,8 @@ import Disconnect from "./Disconnect";
 import Refresh from "./Refresh";
 import ListActivities from "./ListActivities";
 import Charts from "./Charts";
-import { fetchInfos } from "../actions/index";
+import { fetchInfos, changeContent } from "../actions/index";
 import '../../App.css';
-import { changeContent } from '../actions/index';
 import Settings from "./Settings";
 import InterfaceMaker from "./InterfaceMaker";
 
